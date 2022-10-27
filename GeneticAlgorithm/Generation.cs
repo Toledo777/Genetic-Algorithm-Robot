@@ -12,18 +12,29 @@ namespace GeneticAlgorithm
         private double _averageFitness;
 
 
-        // regular constructor
+        // constructor, only called the first time
         public Generation(IGeneticAlgorithm geneticAlgorithm ,FitnessEventHandler fitnessHandler, int seed) {
             _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
-            _fitnessHandler  =fitnessHandler;
+            _fitnessHandler  = fitnessHandler;
             _averageFitness = calculateAverageFitness();
             _maxFitness = calculateMaxFitness();
         }
 
         // copy constructor
-        public Generation() {
+        public Generation(IChromosome[] chromArr) {
             int seed = _seed;
+            _chromosomeArr = new IChromosome[chromArr.Length];
+
+            for (int i = 0; i < chromArr.Length; i++) {
+                // calls copy constructor of chromosome and sets the copy chromosome;
+                _chromosomeArr[i] = new Chromosome(chromArr[i]);
+            }
+
+            _fitnessHandler  = fitnessHandler;
+            _averageFitness = calculateAverageFitness();
+            _maxFitness = calculateMaxFitness();
+
             // TO-DO add parameters
             IGeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
         }
