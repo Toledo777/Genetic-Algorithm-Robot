@@ -30,7 +30,16 @@ namespace GeneticAlgorithm
 
         public long GenerationCount
         {
-      
+            get { return this._generationCount; }
+            set
+            {   
+                // Ensures that the new value is the newer genration
+                if (this._generationCount < value)
+                {
+                    throw new ArgumentException($"You can't set an older generation Number: {this._generationCount}. to a newer one: {value}");
+                }
+                this._generationCount = value;
+            }
         }
 
         public IGeneration GenerateGeneration()
