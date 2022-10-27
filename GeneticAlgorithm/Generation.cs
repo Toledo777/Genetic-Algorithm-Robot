@@ -1,6 +1,6 @@
 namespace GeneticAlgorithm
 {
-    public class GenerationDetails : IGenerationDetails
+    public class Generation : IGenerationDetails
     {
 
 
@@ -11,16 +11,20 @@ namespace GeneticAlgorithm
 
         private double MaxFitness => throw new System.NotImplementedException();
 
-        private long NumberOfChromosomes => throw new System.NotImplementedException();
+        
 
         // regular constructor
-        public GenerationDetails(IGeneticAlgorithm geneticAlgorithm ,FitnessEventHandler fitnessHandler, int seed) {
+        public Generation(IGeneticAlgorithm geneticAlgorithm ,FitnessEventHandler fitnessHandler, int seed) {
             _geneticAlgorithm = geneticAlgorithm;
         }
 
         // copy constructor
-        public GenerationDetails() {
+        public Generation() {
             
+        }
+
+        private long NumberOfChromosomes() {
+            return _chromosomeArr.Length;
         }
 
         public IChromosome this[int index] {
