@@ -7,13 +7,18 @@ namespace GeneticAlgorithm
         private IGeneticAlgorithm _geneticAlgorithm;
         private int _seed;
         private FitnessEventHandler _fitnessHandler;
-        
+        private long _numberOfChromosomes;
+        private int _maxFitness;
+        private double _averageFitness;
+
 
         // regular constructor
         public Generation(IGeneticAlgorithm geneticAlgorithm ,FitnessEventHandler fitnessHandler, int seed) {
             _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
             _fitnessHandler  =fitnessHandler;
+            _averageFitness = calculateAverageFitness();
+            _maxFitness = calculateMaxFitness();
         }
 
         // copy constructor
@@ -23,11 +28,19 @@ namespace GeneticAlgorithm
             IGeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
         }
 
-        private long NumberOfChromosomes() {
-            return _chromosomeArr.Length;
+        private long NumberOfChromosomes {
+            get {return _chromosomeArr.Length; }
         }
 
-        private double AverageFitness() {
+        // property
+        public double AverageFitness {
+            get { return _averageFitness;}
+            set { _averageFitness = value;}
+        }
+
+
+        // helper function
+        private double calculateAverageFitness() {
             // sum of fitness of all chromosomes
             double sum = 0;
             for (int i = 0; i < _chromosomeArr.Length; i++) {
@@ -38,8 +51,8 @@ namespace GeneticAlgorithm
             return sum / _chromosomeArr.Length;
         }
 
-
-        private double MaxFitness() {
+        // helper function
+        private double calculateMaxFitness() {
             double max = 0;
 
             // loop chromosomes to get max
@@ -48,7 +61,6 @@ namespace GeneticAlgorithm
                     max = _chromosomeArr[i].Fitness;
                 }
             }
-
             return max;
         }
 
