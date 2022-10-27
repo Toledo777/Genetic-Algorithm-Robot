@@ -6,8 +6,6 @@ namespace GeneticAlgorithm
         private IChromosome[] _chromosomeArr; //change later to chromosome??
         private IGeneticAlgorithm _geneticAlgorithm;
         private int _seed;
-        private double AverageFitness => throw new System.NotImplementedException();
-
         private FitnessEventHandler _fitnessHandler;
         
 
@@ -28,6 +26,18 @@ namespace GeneticAlgorithm
         private long NumberOfChromosomes() {
             return _chromosomeArr.Length;
         }
+
+        private double AverageFitness() {
+            // sum of fitness of all chromosomes
+            double sum = 0;
+            for (int i = 0; i < _chromosomeArr.Length; i++) {
+                sum+= _chromosomeArr[i].Fitness;
+            }
+
+            // return and calculate average
+            return sum / _chromosomeArr.Length;
+        }
+
 
         private double MaxFitness() {
             double max = 0;
