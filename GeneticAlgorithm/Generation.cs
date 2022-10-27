@@ -3,10 +3,9 @@ namespace GeneticAlgorithm
     public class Generation : IGenerationDetails
     {
 
-
         private IChromosome[] _chromosomeArr; //change later to chromosome??
         private IGeneticAlgorithm _geneticAlgorithm;
-
+        private int _seed;
         private double AverageFitness => throw new System.NotImplementedException();
 
         private double MaxFitness => throw new System.NotImplementedException();
@@ -15,6 +14,7 @@ namespace GeneticAlgorithm
 
         // regular constructor
         public Generation(IGeneticAlgorithm geneticAlgorithm ,FitnessEventHandler fitnessHandler, int seed) {
+            _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
         }
 
@@ -28,7 +28,8 @@ namespace GeneticAlgorithm
         }
 
         public IChromosome this[int index] {
-
+            get { return _chromosomeArr[index]; }
+            set { _chromosomeArr[index] = value; }
         }
 
         public IChromosome SelectParent() {
