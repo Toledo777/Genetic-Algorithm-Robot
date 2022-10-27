@@ -8,7 +8,7 @@ namespace GeneticAlgorithm
         private int _seed;
         private FitnessEventHandler _fitnessHandler;
         private long _numberOfChromosomes;
-        private int _maxFitness;
+        private double _maxFitness;
         private double _averageFitness;
 
 
@@ -28,7 +28,8 @@ namespace GeneticAlgorithm
             IGeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
         }
 
-        private long NumberOfChromosomes {
+        // property
+        public long NumberOfChromosomes {
             get {return _chromosomeArr.Length; }
         }
 
@@ -37,7 +38,12 @@ namespace GeneticAlgorithm
             get { return _averageFitness;}
             set { _averageFitness = value;}
         }
-
+        
+        // property
+        public double MaxFitness {
+            get { return _maxFitness;}
+            set {_maxFitness = value;}
+        }
 
         // helper function
         private double calculateAverageFitness() {
