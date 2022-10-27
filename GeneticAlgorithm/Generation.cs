@@ -31,10 +31,11 @@ namespace GeneticAlgorithm
                 _chromosomeArr[i] = new Chromosome(chromArr[i]);
             }
 
-            _fitnessHandler  = fitnessHandler;
+            
             _averageFitness = calculateAverageFitness();
             _maxFitness = calculateMaxFitness();
 
+            _fitnessHandler  = fitnessHandler;
             // TO-DO add parameters
             IGeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
         }
@@ -87,12 +88,13 @@ namespace GeneticAlgorithm
             set { _chromosomeArr[index] = value; }
         }
 
+        // select random parents from top range
         public IChromosome SelectParent() {
 
         }
 
         public void EvaluateFitnessOfPopulation() {
-
+            +
         }
 
 
