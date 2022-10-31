@@ -20,6 +20,7 @@ namespace GeneticAlgorithm
             _fitnessHandler  = fitnessHandler;
             _averageFitness = calculateAverageFitness();
             _maxFitness = calculateMaxFitness();
+            _chromosomeArr = new Chromosome[geneticAlgorithm.PopulationSize];
         }
 
         // copy constructor
