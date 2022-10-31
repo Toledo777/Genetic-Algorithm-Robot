@@ -44,7 +44,17 @@ namespace GeneticAlgorithm
 
         public IGeneration GenerateGeneration()
         {
-            throw new System.NotImplementedException();
+            // first generation is generated here
+            if (GenerationCount == 0) {
+                Generation generation = new Generation(this, this.FitnessCalculation, _seed);
+                
+            }
+
+            // subsequent generations are generated here
+            else {
+
+            }
+
         }
     }
 }
