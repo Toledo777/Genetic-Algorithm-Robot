@@ -1,5 +1,6 @@
 namespace GeneticAlgorithm
 {
+    using System;
     public class Generation : IGenerationDetails
     {
 
@@ -10,10 +11,10 @@ namespace GeneticAlgorithm
         private long _numberOfChromosomes;
         private double _maxFitness;
         private double _averageFitness;
-
+        private const int _parentRange = 10;
 
         // constructor, only called the first time
-        public Generation(IGeneticAlgorithm geneticAlgorithm ,FitnessEventHandler fitnessHandler, int seed) {
+        public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int seed) {
             _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
             _fitnessHandler  = fitnessHandler;
@@ -48,7 +49,14 @@ namespace GeneticAlgorithm
         // property
         public double AverageFitness {
             get { return _averageFitness;}
-            set { _averageFitness = value;}
+
+            set 
+            {   
+                if (value >= 0) 
+                {
+                    _averageFitness = value;
+                }
+            }
         }
         
         // property
@@ -90,11 +98,16 @@ namespace GeneticAlgorithm
 
         // select random parents from top range
         public IChromosome SelectParent() {
-
+            // sort array using CompareTo method of chromosome
+            Array.Sort(_chromosomeArr);
+            Random rng = new Random(_seed);
+            // get random index from 0 to _parentRange
+            int randParentIndex = rng.Next(0, _parentRange);
+            return _chromosomeArr[randParentIndex];
         }
-
+ 
         public void EvaluateFitnessOfPopulation() {
-            +
+            
         }
 
 
