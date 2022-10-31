@@ -17,8 +17,8 @@ namespace GeneticAlgorithm
             _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
             _fitnessHandler  = fitnessHandler;
-            _averageFitness = calculateAverageFitness();
-            _maxFitness = calculateMaxFitness();
+            AverageFitness = calculateAverageFitness();
+            MaxFitness = calculateMaxFitness();
         }
 
         // copy constructor
@@ -47,14 +47,14 @@ namespace GeneticAlgorithm
 
         // property
         public double AverageFitness {
-            get { return _averageFitness;}
-            set { _averageFitness = value;}
+            get;
+            set;
         }
         
         // property
         public double MaxFitness {
-            get { return _maxFitness;}
-            set {_maxFitness = value;}
+            get;
+            set;
         }
 
         // helper function
@@ -94,7 +94,7 @@ namespace GeneticAlgorithm
         }
 
         public void EvaluateFitnessOfPopulation() {
-            +
+            
         }
 
 
