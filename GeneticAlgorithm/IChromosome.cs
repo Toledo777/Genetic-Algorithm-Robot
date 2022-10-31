@@ -10,6 +10,8 @@ namespace GeneticAlgorithm
         /// <value>A value representing the fitness of the IChromosome</value>
         double Fitness {get;}
 
+         int[] Genes { get; }
+
         /// <summary>
         /// Uses a crossover function to create two offspring, then iterates through the
         /// two child Chromosomes genes, changing them to random values according to the mutation rate.
