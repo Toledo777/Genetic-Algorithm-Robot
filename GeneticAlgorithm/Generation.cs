@@ -105,9 +105,13 @@ namespace GeneticAlgorithm
             int randParentIndex = rng.Next(0, _parentRange);
             return _chromosomeArr[randParentIndex];
         }
- 
+
+        // unsure about how this function should be made
         public void EvaluateFitnessOfPopulation() {
-            
+            for (int i = 0; i < _chromosomeArr.Length; i++) {
+                // call fitness handler for each chromosome
+                _fitnessHandler(_chromosomeArr[i], this);
+            }
         }
 
 
