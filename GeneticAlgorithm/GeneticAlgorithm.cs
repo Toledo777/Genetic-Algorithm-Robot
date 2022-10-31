@@ -5,13 +5,13 @@ namespace GeneticAlgorithm
     internal class GeneticAlgorithm : IGeneticAlgorithm
     {
         private long _generationCount;
+        private Generation _currentGeneration;
         public int PopulationSize { get; }
         public int NumberOfGenes { get; }
         public int LengthOfGene { get; }
         public double MutationRate { get; }
         public double EliteRate { get; }
         public int NumberOfTrials { get; }
-        public IGeneration CurrentGeneration { get; }
         public FitnessEventHandler FitnessCalculation { get; }
         private int? _seed;
 
@@ -42,12 +42,27 @@ namespace GeneticAlgorithm
             }
         }
 
+        public IGeneration CurrentGeneration { 
+            get;
+            set {
+                // validate value type
+                if (typeof(value).IsInstanceOfType(Generation) {
+                    _currentGeneration = value;
+                }
+            }
+        }
         public IGeneration GenerateGeneration()
         {
             // first generation is generated here
             if (GenerationCount == 0) {
                 Generation generation = new Generation(this, this.FitnessCalculation, _seed);
-                
+                // loop generation chromosome array and create random chromosome at each index
+                for (int i = 0; i < PopulationSize; i++) {
+                    // new random chromosome
+                    generation[i] = new Chromosome(NumberOfGenes, LengthOfGene, _seed);
+                }
+                CurrentGeneration = generation;
+                _generationCount++;
             }
 
             // subsequent generations are generated here
