@@ -1,5 +1,6 @@
 namespace GeneticAlgorithm
 {
+    using System;
     public class Generation : IGenerationDetails
     {
 
@@ -10,15 +11,21 @@ namespace GeneticAlgorithm
         private long _numberOfChromosomes;
         private double _maxFitness;
         private double _averageFitness;
-
+        private const int _parentRange = 10;
 
         // constructor, only called the first time
-        public Generation(IGeneticAlgorithm geneticAlgorithm ,FitnessEventHandler fitnessHandler, int seed) {
+        public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int seed) {
             _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
             _fitnessHandler  = fitnessHandler;
+<<<<<<< HEAD
             AverageFitness = calculateAverageFitness();
             MaxFitness = calculateMaxFitness();
+=======
+            _averageFitness = calculateAverageFitness();
+            _maxFitness = calculateMaxFitness();
+            _chromosomeArr = new Chromosome[geneticAlgorithm.PopulationSize];
+>>>>>>> cc9e0fa25f6017cd66e0dd0e830009626d2d736a
         }
 
         // copy constructor
@@ -90,11 +97,20 @@ namespace GeneticAlgorithm
 
         // select random parents from top range
         public IChromosome SelectParent() {
-
+            // sort array using CompareTo method of chromosome
+            Array.Sort(_chromosomeArr);
+            Random rng = new Random(_seed);
+            // get random index from 0 to _parentRange
+            int randParentIndex = rng.Next(0, _parentRange);
+            return _chromosomeArr[randParentIndex];
         }
 
+        // unsure about how this function should be made
         public void EvaluateFitnessOfPopulation() {
-            
+            for (int i = 0; i < _chromosomeArr.Length; i++) {
+                // call fitness handler for each chromosome
+               _chromosomeArr[i].Fitness = _fitnessHandler(_chromosomeArr[i], this);
+            }
         }
 
 
