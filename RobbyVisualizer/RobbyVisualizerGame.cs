@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace RobbyVisualizer
 {
-    public class Game1 : Game
+    public class RobbyVisualizerGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public Game1()
+        public RobbyVisualizerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
