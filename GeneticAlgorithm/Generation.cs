@@ -6,15 +6,15 @@ namespace GeneticAlgorithm
 
         private IChromosome[] _chromosomeArr; //change later to chromosome??
         private IGeneticAlgorithm _geneticAlgorithm;
-        private int _seed;
-        private FitnessEventHandler _fitnessHandler;
+        private int? _seed;
+        private static FitnessEventHandler _fitnessHandler;
         private long _numberOfChromosomes;
         private double _maxFitness;
         private double _averageFitness;
         private const int _parentRange = 10;
 
         // constructor, only called the first time
-        public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int seed) {
+        public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null) {
             _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
             _fitnessHandler  = fitnessHandler;
@@ -24,7 +24,6 @@ namespace GeneticAlgorithm
 
         // copy constructor
         public Generation(IChromosome[] chromArr) {
-            int seed = _seed;
             _chromosomeArr = new IChromosome[chromArr.Length];
 
             for (int i = 0; i < chromArr.Length; i++) {
@@ -32,13 +31,8 @@ namespace GeneticAlgorithm
                 _chromosomeArr[i] = new Chromosome(chromArr[i]);
             }
 
-            
             _averageFitness = calculateAverageFitness();
             _maxFitness = calculateMaxFitness();
-
-            _fitnessHandler  = fitnessHandler;
-            // TO-DO add parameters
-            IGeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
         }
 
         // property
@@ -93,7 +87,11 @@ namespace GeneticAlgorithm
         public IChromosome SelectParent() {
             // sort array using CompareTo method of chromosome
             Array.Sort(_chromosomeArr);
-            Random rng = new Random(_seed);
+            Random rng;
+            if (_seed != null) {
+                rng = new Random((int)_seed);
+            }
+            R
             // get random index from 0 to _parentRange
             int randParentIndex = rng.Next(0, _parentRange);
             return _chromosomeArr[randParentIndex];
