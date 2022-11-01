@@ -86,7 +86,7 @@ namespace GeneticAlgorithm
             // Reproduce Generation from CurrentGeneration
             else
             {
-                return GenerateNextGeneration();
+                return ReproduceNextGeneration();
             }
 
         }
@@ -96,7 +96,7 @@ namespace GeneticAlgorithm
         /// of the current generation.
         /// </summary>
         /// <returns> A new generation of chromosome with IGeneration </returns>
-        private IGeneration GenerateNextGeneration()
+        private IGeneration ReproduceNextGeneration()
         {
             IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
             List<IChromosome> eliteChromsome = new List<IChromosome>();
@@ -134,7 +134,7 @@ namespace GeneticAlgorithm
                     newGenerationChromosome[i++] = children[1];
                 }
             }
-            
+
             return new Generation(newGenerationChromosome);
         }
 
