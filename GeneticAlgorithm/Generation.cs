@@ -35,6 +35,7 @@ namespace GeneticAlgorithm
 
             _averageFitness = calculateAverageFitness();
             _maxFitness = calculateMaxFitness();
+            // TO-DO ask if GeneticAlgorithm should be generated here.
         }
 
         // property
@@ -122,7 +123,7 @@ namespace GeneticAlgorithm
                     // assign fitness to be average of all trials for that chromosome
                     _chromosomeArr[i].Fitness = fitnessSum / _geneticAlgorithm.NumberOfTrials;
                 }
-                
+
                 // when number of trials is 0 or negative
                 else {
                     throw new InvalidOperationException("Cannot compute fitness without at least 1 trial");
