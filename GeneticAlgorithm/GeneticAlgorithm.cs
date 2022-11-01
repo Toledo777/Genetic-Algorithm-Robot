@@ -1,26 +1,28 @@
 using System;
-
+using System.Collections.Generic;
 namespace GeneticAlgorithm
 {
     internal class GeneticAlgorithm : IGeneticAlgorithm
     {
         private long _generationCount;
-        
+
         public int PopulationSize { get; }
-        
+
         public int NumberOfGenes { get; }
-        
+
         public int LengthOfGene { get; }
-        
+
         public double MutationRate { get; }
-        
+
         public double EliteRate { get; }
-        
+
         public int NumberOfTrials { get; }
-        
+
         public FitnessEventHandler FitnessCalculation { get; }
-        
+
         private int? _seed;
+
+        private Random _random;
 
         public GeneticAlgorithm(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, FitnessEventHandler fitnessCalculation, int? seed = null)
         {
@@ -28,10 +30,18 @@ namespace GeneticAlgorithm
             this.NumberOfGenes = numberOfGenes;
             this.LengthOfGene = lengthOfGene;
             this.MutationRate = mutationRate;
-            this.EliteRate = eliteRate;
+            this.EliteRate = eliteRate; // Given in %/100 tranform to decimal/1.0
             this.NumberOfTrials = numberOfTrials;
             this.FitnessCalculation = fitnessCalculation;
             this._seed = seed;
+            if (seed != null)
+            {
+                _random = new Random((int)seed);
+            }
+            else
+            {
+                _random = new Random();
+            }
         }
 
 
@@ -39,7 +49,7 @@ namespace GeneticAlgorithm
         {
             get { return this._generationCount; }
             set
-            {   
+            {
                 // Ensures that the new value is the newer genration
                 if (this._generationCount < value)
                 {
@@ -49,37 +59,75 @@ namespace GeneticAlgorithm
             }
         }
 
-        public IGeneration CurrentGeneration { 
-            get;
-            set;
-        }
-        
+        public IGeneration CurrentGeneration { get; set; }
+
         public IGeneration GenerateGeneration()
         {
-            // first generation is generated here
-            if (GenerationCount == 0) {
+            // Inital Generation - First Generation
+            if (GenerationCount == 0)
+            {
                 Generation generation = new Generation(this, this.FitnessCalculation, _seed);
-                // loop generation chromosome array and create random chromosome at each index
-                for (int i = 0; i < PopulationSize; i++) {
-                    // new random chromosome
+
+                for (int i = 0; i < PopulationSize; i++)
+                {
                     generation[i] = new Chromosome(NumberOfGenes, LengthOfGene, _seed);
                 }
-                // CurrentGeneration = generation;
                 _generationCount++;
                 return generation;
-                
+
             }
-            // subsequent generations are generated here
-            else {
+            // Reproduce Generation from CurrentGeneration
+            else
+            {
                 return GenerateNextGeneration();
             }
 
         }
 
+
         private IGeneration GenerateNextGeneration()
         {
-            throw new NotImplementedException();
-        }
+            IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
+            List<IChromosome> eliteChromsome = new List<IChromosome>();
+            double eliteChromosomeFitnessLowerLimit = this.CurrentGeneration.MaxFitness - 30;
+            // Select the elite chromosomes
+            for (int i = 0; i < PopulationSize; i++)
+            {
+                if (this.CurrentGeneration[i].Fitness >= eliteChromosomeFitnessLowerLimit)
+                {
+                    // Check elite rate to add to list
+                    if (this._random.NextDouble() <= (EliteRate / 100.00))
+                    {
+                        eliteChromsome.Add(this.CurrentGeneration[i]);
+                    }
+                }
+            }
+            // Reproduce the elite chromosomes
+            for (int i = 0; i < eliteChromsome.Count; i++)
+            {
+                newGenerationChromosome[i] = eliteChromsome[i];
+            }
+            for (int i = eliteChromsome.Count; i < PopulationSize; i++)
+            {
+                // Select the parents
+                IChromosome parentA = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+                IChromosome parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+                if (parentB.CompareTo(parentA) == 0)
+                {
+                    parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+                }
+                // Reproduce children
+                IChromosome[] children = parentA.Reproduce(parentB, this.MutationRate);
 
+                // Check if there is space for another child
+                newGenerationChromosome[i] = children[0];
+                if (i++! >= PopulationSize)
+                {
+                    newGenerationChromosome[i++] = children[1];
+                }
+            }
+            return new Generation(newGenerationChromosome);
+        }
     }
 }
+
