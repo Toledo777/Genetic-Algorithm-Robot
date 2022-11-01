@@ -18,14 +18,8 @@ namespace GeneticAlgorithm
             _seed = seed;
             _geneticAlgorithm = geneticAlgorithm;
             _fitnessHandler  = fitnessHandler;
-<<<<<<< HEAD
             AverageFitness = calculateAverageFitness();
             MaxFitness = calculateMaxFitness();
-=======
-            _averageFitness = calculateAverageFitness();
-            _maxFitness = calculateMaxFitness();
-            _chromosomeArr = new Chromosome[geneticAlgorithm.PopulationSize];
->>>>>>> cc9e0fa25f6017cd66e0dd0e830009626d2d736a
         }
 
         // copy constructor
