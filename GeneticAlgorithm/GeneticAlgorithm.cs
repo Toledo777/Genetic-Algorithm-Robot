@@ -61,32 +61,29 @@ namespace GeneticAlgorithm
 
         public IGeneration CurrentGeneration { get; set; }
 
-        /// <summary>
-        /// This method creates a new generation.
-        /// The first generation is created with random genes.
-        /// The following are created via reproduction and mutation of the previous generations'
-        /// elite chromosomes.
-        /// </summary>
-        /// <returns> A new generation of chromosome with IGeneration </returns>
+
         public IGeneration GenerateGeneration()
         {
             // Inital Generation - First Generation
-            if (GenerationCount == 0)
+            if (this.GenerationCount == 0)
             {
                 Generation generation = new Generation(this, this.FitnessCalculation, _seed);
 
-                for (int i = 0; i < PopulationSize; i++)
+                for (int i = 0; i < this.PopulationSize; i++)
                 {
-                    generation[i] = new Chromosome(NumberOfGenes, LengthOfGene, _seed);
+                    generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this._seed);
                 }
-                _generationCount++;
+                this.GenerationCount++;
+
+                this.CurrentGeneration =  generation;
                 return generation;
 
             }
             // Reproduce Generation from CurrentGeneration
             else
             {
-                return ReproduceNextGeneration();
+                this.CurrentGeneration = ReproduceNextGeneration();
+                return this.CurrentGeneration;
             }
 
         }
@@ -103,12 +100,12 @@ namespace GeneticAlgorithm
             // Define fitness of the elite chromosomes
             double eliteChromosomeFitnessLowerLimit = this.CurrentGeneration.MaxFitness - 30;
             // Select the elite chromosomes
-            for (int i = 0; i < PopulationSize; i++)
+            for (int i = 0; i < this.PopulationSize; i++)
             {
                 if (this.CurrentGeneration[i].Fitness >= eliteChromosomeFitnessLowerLimit)
                 {
                     // Check elite rate to add to list
-                    if (this._random.NextDouble() <= (EliteRate / 100.00))
+                    if (this._random.NextDouble() <= (this.EliteRate / 100.00))
                     {
                         eliteChromsome.Add(this.CurrentGeneration[i]);
                     }
@@ -122,14 +119,14 @@ namespace GeneticAlgorithm
             }
 
             // Create the rest of the chromosomes
-            for (int i = eliteChromsome.Count; i < PopulationSize; i++)
+            for (int i = eliteChromsome.Count; i < this.PopulationSize; i++)
             {
                 // Select the parents
                 IChromosome[] children = GetReproducedChildren(eliteChromsome);
 
                 newGenerationChromosome[i] = children[0];
                 // Check if there is space for another child
-                if (i++! >= PopulationSize)
+                if (i++! >= this.PopulationSize)
                 {
                     newGenerationChromosome[i++] = children[1];
                 }
