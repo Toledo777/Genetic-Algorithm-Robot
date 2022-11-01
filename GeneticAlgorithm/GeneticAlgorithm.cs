@@ -61,6 +61,13 @@ namespace GeneticAlgorithm
 
         public IGeneration CurrentGeneration { get; set; }
 
+        /// <summary>
+        /// This method creates a new generation.
+        /// The first generation is created with random genes.
+        /// The following are created via reproduction and mutation of the previous generations'
+        /// elite chromosomes.
+        /// </summary>
+        /// <returns> A new generation of chromosome with IGeneration </returns>
         public IGeneration GenerateGeneration()
         {
             // Inital Generation - First Generation
@@ -84,11 +91,16 @@ namespace GeneticAlgorithm
 
         }
 
-
+        /// <summary>
+        /// This method creates a new generation based Elite Chromosomes 
+        /// of the current generation.
+        /// </summary>
+        /// <returns> A new generation of chromosome with IGeneration </returns>
         private IGeneration GenerateNextGeneration()
         {
             IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
             List<IChromosome> eliteChromsome = new List<IChromosome>();
+            // Define fitness of the elite chromosomes
             double eliteChromosomeFitnessLowerLimit = this.CurrentGeneration.MaxFitness - 30;
             // Select the elite chromosomes
             for (int i = 0; i < PopulationSize; i++)
@@ -102,31 +114,46 @@ namespace GeneticAlgorithm
                     }
                 }
             }
+
             // Reproduce the elite chromosomes
             for (int i = 0; i < eliteChromsome.Count; i++)
             {
                 newGenerationChromosome[i] = eliteChromsome[i];
             }
+
+            // Create the rest of the chromosomes
             for (int i = eliteChromsome.Count; i < PopulationSize; i++)
             {
                 // Select the parents
-                IChromosome parentA = eliteChromsome[this._random.Next(eliteChromsome.Count)];
-                IChromosome parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
-                if (parentB.CompareTo(parentA) == 0)
-                {
-                    parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
-                }
-                // Reproduce children
-                IChromosome[] children = parentA.Reproduce(parentB, this.MutationRate);
+                IChromosome[] children = GetReproducedChildren(eliteChromsome);
 
-                // Check if there is space for another child
                 newGenerationChromosome[i] = children[0];
+                // Check if there is space for another child
                 if (i++! >= PopulationSize)
                 {
                     newGenerationChromosome[i++] = children[1];
                 }
             }
+            
             return new Generation(newGenerationChromosome);
+        }
+
+        /// <summary>
+        /// This method selects two parents from the elite chromosomes 
+        /// and returns their reproduced children.
+        /// </summary>
+        /// <returns> Two children Chromosome created by elite Chromosomes. </returns>
+        private IChromosome[] GetReproducedChildren(List<IChromosome> eliteChromsome)
+        {
+            IChromosome parentA = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+            IChromosome parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+            if (parentB.CompareTo(parentA) == 0)
+            {
+                parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+            }
+            // Reproduce children
+            IChromosome[] children = parentA.Reproduce(parentB, this.MutationRate);
+            return children;
         }
     }
 }
