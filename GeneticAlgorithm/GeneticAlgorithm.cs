@@ -75,7 +75,7 @@ namespace GeneticAlgorithm
                 }
                 this.GenerationCount++;
 
-                this.CurrentGeneration =  generation;
+                this.CurrentGeneration = generation;
                 return generation;
 
             }
@@ -113,7 +113,8 @@ namespace GeneticAlgorithm
             }
 
             // Reproduce the elite chromosomes
-            for (int i = 0; i < eliteChromsome.Count; i++)
+            // i is increased by 2 because we are adding 2 chromosomes at a time.
+            for (int i = 0; i < eliteChromsome.Count; i +=2)
             {
                 newGenerationChromosome[i] = eliteChromsome[i];
             }
@@ -126,7 +127,7 @@ namespace GeneticAlgorithm
 
                 newGenerationChromosome[i] = children[0];
                 // Check if there is space for another child
-                if (i++! >= this.PopulationSize)
+                if (i++ < this.PopulationSize)
                 {
                     newGenerationChromosome[i++] = children[1];
                 }
@@ -144,9 +145,13 @@ namespace GeneticAlgorithm
         {
             IChromosome parentA = eliteChromsome[this._random.Next(eliteChromsome.Count)];
             IChromosome parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
-            if (parentB.CompareTo(parentA) == 0)
+            while (true)
             {
-                parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+                if (parentB.CompareTo(parentA) == 0)
+                {
+                    parentB = eliteChromsome[this._random.Next(eliteChromsome.Count)];
+                    break;
+                }
             }
             // Reproduce children
             IChromosome[] children = parentA.Reproduce(parentB, this.MutationRate);
