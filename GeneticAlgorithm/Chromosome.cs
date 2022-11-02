@@ -58,11 +58,10 @@ namespace GeneticAlgorithm
         //constructor 3
         public Chromosome(Chromosome chromosome): this(chromosome.Length, chromosome.Genes, chromosome.Seed){ //I don't know if this is how you do it, will have to test.
             int[] genes = new int[chromosome.Length];
-            for(int i = 0; i < genes.Length; i++){
+            for(int i = 0; i < NumGenes; i++){
                 genes[i] = chromosome.Genes[i];
             }
             this.Genes = genes;
-            
         }
 
         public IChromosome[] Reproduce(IChromosome spouse, double mutationProb)
@@ -79,7 +78,7 @@ namespace GeneticAlgorithm
         /// <param name="parent1">The parent whose genes will be mutated with the second parent's </param>
         /// <param name="parent2">The parent whose genes mutate with the first parent</param>
         /// <returns> A "child" chromosome whose genes is a combination of tis parents</returns>
-        private Chromosome GenerateChild(Chromosome parent1, Chromosome parent2){
+        public Chromosome GenerateChild(Chromosome parent1, Chromosome parent2){
             //we want to create a start and end index, these positions will be the ones whose genes are swapped with the second parent.
             int startIndP2 = _rng.Next(0, parent2.NumGenes-1); // I think the -1 should make sure that we always get at least 1 place to mutate
             int endIndP2 = _rng.Next(startIndP2, this.NumGenes);
@@ -98,7 +97,7 @@ namespace GeneticAlgorithm
         /// <param name="child">The chromosome whose genes will be randomly mutated</param>
         /// <param name="mutationProb">A double representing the mutation probability</param>
         /// <returns>The chromosome after having been mutated. </returns>
-        private IChromosome MutateChild(Chromosome child, double mutationProb){
+        public IChromosome MutateChild(Chromosome child, double mutationProb){
             for(int i = 0; i < child.NumGenes; i++){
                 if(_rng.NextDouble() <= mutationProb){
                     child[i] = _rng.Next(1,8);
