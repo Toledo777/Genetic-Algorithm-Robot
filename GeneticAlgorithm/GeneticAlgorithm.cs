@@ -114,22 +114,22 @@ namespace GeneticAlgorithm
 
             // Reproduce the elite chromosomes
             // i is increased by 2 because we are adding 2 chromosomes at a time.
-            for (int i = 0; i < eliteChromsome.Count; i +=2)
+            for (int i = 0; i < eliteChromsome.Count; i++)
             {
                 newGenerationChromosome[i] = eliteChromsome[i];
             }
 
             // Create the rest of the chromosomes
-            for (int i = eliteChromsome.Count; i < this.PopulationSize; i++)
+            for (int i = eliteChromsome.Count; i < this.PopulationSize; i +=2)
             {
                 // Select the parents
                 IChromosome[] children = GetReproducedChildren(eliteChromsome);
 
                 newGenerationChromosome[i] = children[0];
                 // Check if there is space for another child
-                if (i++ < this.PopulationSize)
+                if (i+1 < this.PopulationSize)
                 {
-                    newGenerationChromosome[i++] = children[1];
+                    newGenerationChromosome[i+1] = children[1];
                 }
             }
 
