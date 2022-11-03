@@ -14,32 +14,41 @@ namespace GeneticAlgorithm
         // constructor, only called the first time
         public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null) 
         {
-            _seed = seed;
-            _geneticAlgorithm = geneticAlgorithm;
-            _fitnessHandler  = fitnessHandler;
-            AverageFitness = calculateAverageFitness();
-            MaxFitness = calculateMaxFitness();
+            this._seed = seed;
+            this._geneticAlgorithm = geneticAlgorithm;
+            this. _fitnessHandler  = fitnessHandler;
+            this.AverageFitness = calculateAverageFitness();
+            this.MaxFitness = calculateMaxFitness();
         }
 
         // copy constructor
         public Generation(IChromosome[] chromArr, IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null) : this(geneticAlgorithm, fitnessHandler, seed)
         {
-            _chromosomeArr = new Chromosome[chromArr.Length];
+            this._chromosomeArr = new Chromosome[chromArr.Length];
 
             for (int i = 0; i < chromArr.Length; i++) {
                 // calls copy constructor of chromosome and sets the copy chromosome;
                 _chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
 
-            _averageFitness = calculateAverageFitness();
-            _maxFitness = calculateMaxFitness();
-            // TO-DO ask if GeneticAlgorithm should be generated here.
+            this.AverageFitness = calculateAverageFitness();
+            this.MaxFitness = calculateMaxFitness();
+
+        }
+
+        /// <summary>
+        /// Added internal property that returns the chromosome array
+        /// </summary>
+        /// <returns> Chromosome[] </returns>
+        internal Chromosome[] ChromosomeArr
+        {
+            get {return this._chromosomeArr;}
         }
 
         // property
         public long NumberOfChromosomes 
         {
-            get {return _chromosomeArr.Length; }
+            get {return _chromosomeArr.Length;}
         }
 
         // property
