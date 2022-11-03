@@ -77,7 +77,7 @@ namespace GeneticAlgorithm
                 {
                     generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this._seed);
                 }
-                
+
                 this.GenerationCount++;
                 this.CurrentGeneration = generation;
 
@@ -100,7 +100,7 @@ namespace GeneticAlgorithm
         private IGeneration ReproduceNextGeneration()
         {
             IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
-        
+
             // Get All Elite Chromsomes
             int eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100.00));
             IChromosome[] eliteChromsome = new Chromosome[this._eliteChromosomePopulationSize];
@@ -143,10 +143,14 @@ namespace GeneticAlgorithm
             // Checks that two Parents are not the same
             while (true)
             {
-                if (parentB.CompareTo(parentA) == 0)
+                // Check if parentA and parentB are the same
+                if (parentA == parentB)
                 {
                     parentB = eliteChromsome[this._random.Next(eliteChromsome.Length)];
-                    break;
+                }
+                else
+                {
+                    break;  
                 }
             }
             // Reproduce children
