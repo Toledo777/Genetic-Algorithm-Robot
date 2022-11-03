@@ -9,8 +9,6 @@ namespace GeneticAlgorithm
         private int? _seed;
         private FitnessEventHandler _fitnessHandler;
         private long _numberOfChromosomes;
-        private double _maxFitness;
-        private double _averageFitness;
         private const int _parentRange = 10;
 
         // constructor, only called the first time
@@ -24,14 +22,9 @@ namespace GeneticAlgorithm
         }
 
         // copy constructor
-        public Generation(IChromosome[] chromArr, IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null)
+        public Generation(IChromosome[] chromArr, IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null) : this(geneticAlgorithm, fitnessHandler, seed)
         {
             _chromosomeArr = new Chromosome[chromArr.Length];
-            _seed = seed;
-            _geneticAlgorithm = geneticAlgorithm;
-            _fitnessHandler  = fitnessHandler;
-            AverageFitness = calculateAverageFitness();
-            MaxFitness = calculateMaxFitness();
 
             for (int i = 0; i < chromArr.Length; i++) {
                 // calls copy constructor of chromosome and sets the copy chromosome;
@@ -52,15 +45,31 @@ namespace GeneticAlgorithm
         // property
         public double AverageFitness 
         {
-            get;
-            set;
+            get
+            {
+                AverageFitness = calculateAverageFitness();
+                return AverageFitness;
+            }
+            set {
+                if (value > 0) {
+                    AverageFitness = value;
+                }
+            }
         }
         
         // property
         public double MaxFitness 
         {
-            get;
-            set;
+            get 
+            {
+                MaxFitness = calculateMaxFitness();
+                return MaxFitness;
+            }
+            set {
+                if (value > 0) {
+                    MaxFitness = value;
+                }
+            }
         }
 
         /// <summary>
@@ -111,11 +120,13 @@ namespace GeneticAlgorithm
             // sort array using CompareTo method of chromosome
             Array.Sort(_chromosomeArr);
             Random rng;
-            if (_seed != null) {
+            if (_seed != null) 
+            {
                 rng = new Random((int)_seed);
-            }else{
-            rng = new Random();
-
+            }
+            else
+            {
+                rng = new Random();
             }
             
             // get random index from 0 to _parentRange
