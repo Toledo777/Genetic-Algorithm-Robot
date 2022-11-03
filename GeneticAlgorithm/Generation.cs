@@ -1,10 +1,11 @@
+ using System;
+
 namespace GeneticAlgorithm
 {
-    using System;
+   
     public class Generation : IGenerationDetails
     {
-
-        private Chromosome[] _chromosomeArr; //change later to chromosome??
+        private Chromosome[] _chromosomeArr;
         private IGeneticAlgorithm _geneticAlgorithm;
         private int? _seed;
         private FitnessEventHandler _fitnessHandler;
@@ -33,7 +34,6 @@ namespace GeneticAlgorithm
 
             this.AverageFitness = calculateAverageFitness();
             this.MaxFitness = calculateMaxFitness();
-
         }
 
         /// <summary>
@@ -45,13 +45,11 @@ namespace GeneticAlgorithm
             get {return this._chromosomeArr;}
         }
 
-        // property
         public long NumberOfChromosomes 
         {
             get {return _chromosomeArr.Length;}
         }
 
-        // property
         public double AverageFitness 
         {
             get
@@ -66,7 +64,6 @@ namespace GeneticAlgorithm
             }
         }
         
-        // property
         public double MaxFitness 
         {
             get 
@@ -130,13 +127,9 @@ namespace GeneticAlgorithm
             Array.Sort(_chromosomeArr);
             Random rng;
             if (_seed != null) 
-            {
                 rng = new Random((int)_seed);
-            }
             else
-            {
                 rng = new Random();
-            }
             
             // get random index from 0 to _parentRange
             int randParentIndex = rng.Next(0, _parentRange);
@@ -164,7 +157,5 @@ namespace GeneticAlgorithm
                 }     
             }
         }
-
-
     }
 }
