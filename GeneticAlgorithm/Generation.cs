@@ -17,7 +17,7 @@ namespace GeneticAlgorithm
         {
             this._seed = seed;
             this._geneticAlgorithm = geneticAlgorithm;
-            this. _fitnessHandler  = fitnessHandler;
+            this._fitnessHandler  = fitnessHandler;
             this.AverageFitness = calculateAverageFitness();
             this.MaxFitness = calculateMaxFitness();
         }
@@ -29,7 +29,7 @@ namespace GeneticAlgorithm
 
             for (int i = 0; i < chromArr.Length; i++) {
                 // calls copy constructor of chromosome and sets the copy chromosome;
-                _chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
+                this._chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
 
             this.AverageFitness = calculateAverageFitness();
@@ -47,7 +47,7 @@ namespace GeneticAlgorithm
 
         public long NumberOfChromosomes 
         {
-            get {return _chromosomeArr.Length;}
+            get {return this._chromosomeArr.Length;}
         }
 
         public double AverageFitness 
@@ -86,13 +86,13 @@ namespace GeneticAlgorithm
         {
             // sum of fitness of all chromosomes
             double sum = 0;
-            for (int i = 0; i < _chromosomeArr.Length; i++) 
+            for (int i = 0; i < this._chromosomeArr.Length; i++) 
             {
-                sum+= _chromosomeArr[i].Fitness;
+                sum+= this._chromosomeArr[i].Fitness;
             }
 
             // return and calculate average
-            return sum / _chromosomeArr.Length;
+            return sum / this._chromosomeArr.Length;
         }
 
         /// <summary>
@@ -104,10 +104,10 @@ namespace GeneticAlgorithm
             double max = 0;
 
             // loop chromosomes to get max
-            for (int i = 0; i < _chromosomeArr.Length; i++) 
+            for (int i = 0; i < this._chromosomeArr.Length; i++) 
             {
-                if (_chromosomeArr[i].Fitness > max) {
-                    max = _chromosomeArr[i].Fitness;
+                if (this._chromosomeArr[i].Fitness > max) {
+                    max = this._chromosomeArr[i].Fitness;
                 }
             }
             return max;
@@ -116,8 +116,8 @@ namespace GeneticAlgorithm
         // Retrieves the IChromosome from the generation
         public IChromosome this[int index] 
         {
-            get { return _chromosomeArr[index]; }
-            set { _chromosomeArr[index] = value as Chromosome; }
+            get { return this._chromosomeArr[index]; }
+            set { this._chromosomeArr[index] = value as Chromosome; }
         }
 
         // select random parents from top range
@@ -126,29 +126,29 @@ namespace GeneticAlgorithm
             // sort array using CompareTo method of chromosome
             Array.Sort(_chromosomeArr);
             Random rng;
-            if (_seed != null) 
-                rng = new Random((int)_seed);
+            if (this._seed != null) 
+                rng = new Random((int)this._seed);
             else
                 rng = new Random();
             
             // get random index from 0 to _parentRange
             int randParentIndex = rng.Next(0, _parentRange);
-            return _chromosomeArr[randParentIndex];
+            return this._chromosomeArr[randParentIndex];
         }
 
         public void EvaluateFitnessOfPopulation() {
             // evaluate fitness of each chromosome in array
             for (int i = 0; i < _geneticAlgorithm.PopulationSize; i++) 
             {
-                if (_geneticAlgorithm.NumberOfTrials > 0)
+                if (this._geneticAlgorithm.NumberOfTrials > 0)
                 {
                     double fitnessSum = 0;
                     for (int j = 0; j < _geneticAlgorithm.NumberOfTrials; j++) 
                     {
-                        fitnessSum += _fitnessHandler(_chromosomeArr[i], this);
+                        fitnessSum += this._fitnessHandler(_chromosomeArr[i], this);
                     }
                     // assign fitness to be average of all trials for that chromosome
-                    _chromosomeArr[i].Fitness = fitnessSum / _geneticAlgorithm.NumberOfTrials;
+                    this._chromosomeArr[i].Fitness = fitnessSum / this._geneticAlgorithm.NumberOfTrials;
                 }
 
                 // when number of trials is 0 or negative
