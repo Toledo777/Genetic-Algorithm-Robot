@@ -31,6 +31,13 @@ namespace ChromosomeTests
         }
 
     }
+    [TestMethod]
+    public void TestMutateMethod()
+    {
+        int seed = 123;
+        Chromosome c = new Chromosome(2,3);
+
+    }
     }
 }
 
