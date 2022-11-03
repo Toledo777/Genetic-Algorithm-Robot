@@ -34,7 +34,7 @@ namespace GeneticAlgorithm
             this._seed = seed;
             NumGenes = numGenes;
             Length = geneLength;
-            Genes= new int[numGenes];
+            Genes = new int[numGenes];
             Fitness = 0;
             if(seed != null){
                 this._rng = new Random((int)seed);
@@ -42,21 +42,21 @@ namespace GeneticAlgorithm
             else{
                 this._rng = new Random();
             }
-            for(int i = 0; i < this.Genes.Length; i++){{
-                Genes[i] = _rng.Next(1,8); // random number between 1 and 7.
+            for(int i = 0; i < this.NumGenes; i++){{
+                Genes[i] = _rng.Next(0,(int)Length); // random number between 1 and 7.
             }}
 
         }
         //constructor 2:
         // when creating a child, the genes are already defined. Thus this overloaded constructor allows for the creation of children with predefined genes.
-        public Chromosome(long geneLength, int[] genes, int? seed = null): this(genes.Length, geneLength, seed) //I don't know if this chaining works, will have to test.
+        public Chromosome(long geneLength, int[] genes, int? seed = null): this(genes.Length, geneLength, seed)
         {
             this.Genes = genes;
         }
 
 
         //constructor 3
-        public Chromosome(Chromosome chromosome): this(chromosome.Length, chromosome.Genes, chromosome.Seed){ //I don't know if this is how you do it, will have to test.
+        public Chromosome(Chromosome chromosome): this(chromosome.Length, chromosome.Genes, chromosome.Seed){
             int[] genes = new int[chromosome.Length];
             for(int i = 0; i < NumGenes; i++){
                 genes[i] = chromosome.Genes[i];
@@ -67,8 +67,8 @@ namespace GeneticAlgorithm
         public IChromosome[] Reproduce(IChromosome spouse, double mutationProb)
         {
             IChromosome[] children = new Chromosome[2];
-            children[0] = MutateChild(GenerateChild(this, (Chromosome)spouse), mutationProb);
-            children[1] = MutateChild(GenerateChild((Chromosome) spouse, this), mutationProb);
+            children[0] = this.GenerateChild((Chromosome)spouse).MutateChromosome(mutationProb);
+            children[1] = ((Chromosome)spouse).GenerateChild(this).MutateChromosome(mutationProb);
             return children;
         }
         
@@ -78,32 +78,35 @@ namespace GeneticAlgorithm
         /// <param name="parent1">The parent whose genes will be mutated with the second parent's </param>
         /// <param name="parent2">The parent whose genes mutate with the first parent</param>
         /// <returns> A "child" chromosome whose genes is a combination of tis parents</returns>
-        public Chromosome GenerateChild(Chromosome parent1, Chromosome parent2){
+        Chromosome GenerateChild(Chromosome spouse){
             //we want to create a start and end index, these positions will be the ones whose genes are swapped with the second parent.
-            int startIndP2 = _rng.Next(0, parent2.NumGenes-1); // I think the -1 should make sure that we always get at least 1 place to mutate
+            int startIndP2 = _rng.Next(0, spouse.NumGenes-1); 
             int endIndP2 = _rng.Next(startIndP2, this.NumGenes);
             //genes to swap
-            int[] genes = parent1.Genes;
-            for(int i = startIndP2; i < endIndP2; i++){
-                genes[i] = parent2[i];
+             int[] genes = new int[this.Genes.Length];
+            //deep copy
+            for(int i = 0; i < this.Genes.Length; i++){
+                genes[i] = this[i];
             }
-            Chromosome child = new Chromosome(parent1.Length, genes, Seed); //need to check that NumGenes and Seed get the right things.
+            for(int i = startIndP2; i < endIndP2; i++){
+                genes[i] = spouse[i];
+            }
+            Chromosome child = new Chromosome(this.Length, genes, Seed); //need to check that NumGenes and Seed get the right things.
             return child;
         }
 
         /// <summary>
-        ///takes a chromosome and mutates it at a rate of the mutationProb (0.1 = 10%)
+        ///Mutates a rate of the mutationProb (0.1 = 10%)
         /// </summary>
-        /// <param name="child">The chromosome whose genes will be randomly mutated</param>
         /// <param name="mutationProb">A double representing the mutation probability</param>
         /// <returns>The chromosome after having been mutated. </returns>
-        public IChromosome MutateChild(Chromosome child, double mutationProb){
-            for(int i = 0; i < child.NumGenes; i++){
-                if(_rng.NextDouble() <= mutationProb){
-                    child[i] = _rng.Next(1,8);
+        IChromosome MutateChromosome(double mutationProb){
+            for(int i = 0; i < this.NumGenes; i++){
+                if(this._rng.NextDouble() <= mutationProb){
+                    this[i] = _rng.Next(0,(int)this.Length);
                 }
             }
-            return child;
+            return this;
         }
  
         /// <summary>

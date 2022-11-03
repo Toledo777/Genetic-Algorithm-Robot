@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GeneticAlgorithm;
+using System;
 
 namespace ChromosomeTests
 {
@@ -17,10 +18,10 @@ namespace ChromosomeTests
     public void TestConstructors()
     {
         //first constructor
-        Chromosome c = new Chromosome(2,3);
+        Chromosome c = new Chromosome(243,8);
             int[] d = {1,2,3,4};
         //second
-        Chromosome c2 = new Chromosome(4,d);
+        Chromosome c2 = new Chromosome(243,d);
         for(int i = 0; i < d.Length; i++){
              Assert.AreEqual(d[i], c2[i]);
         }
@@ -32,12 +33,22 @@ namespace ChromosomeTests
 
     }
     [TestMethod]
-    public void TestMutateMethod()
+    public void TestMutationWorks()
     {
         int seed = 123;
-        Chromosome c = new Chromosome(2,3);
-
-    }
+        Random random = new Random(seed);
+        int numberOfGenes = 10;
+        for(int i = 0; i < numberOfGenes; i++){
+            random.Next(0,7);
+        }
+        Chromosome c = new Chromosome(numberOfGenes,7, seed);
+        Chromosome c2 = new Chromosome(numberOfGenes, 7, seed);
+        IChromosome[] arr = c.Reproduce(c2, 1);
+        for(int i = 0; i < arr[0].Length; i++){
+            random.NextDouble();
+            Assert.AreEqual(c2[i], random.Next(0,7));   
+        }
+        }
     }
 }
 
