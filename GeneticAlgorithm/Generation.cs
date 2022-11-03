@@ -4,10 +4,10 @@ namespace GeneticAlgorithm
     public class Generation : IGenerationDetails
     {
 
-        private IChromosome[] _chromosomeArr; //change later to chromosome??
+        private Chromosome[] _chromosomeArr; //change later to chromosome??
         private IGeneticAlgorithm _geneticAlgorithm;
         private int? _seed;
-        private static FitnessEventHandler _fitnessHandler;
+        private FitnessEventHandler _fitnessHandler;
         private long _numberOfChromosomes;
         private double _maxFitness;
         private double _averageFitness;
@@ -24,13 +24,18 @@ namespace GeneticAlgorithm
         }
 
         // copy constructor
-        public Generation(IChromosome[] chromArr) 
+        public Generation(IChromosome[] chromArr, IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null)
         {
-            _chromosomeArr = new IChromosome[chromArr.Length];
+            _chromosomeArr = new Chromosome[chromArr.Length];
+            _seed = seed;
+            _geneticAlgorithm = geneticAlgorithm;
+            _fitnessHandler  = fitnessHandler;
+            AverageFitness = calculateAverageFitness();
+            MaxFitness = calculateMaxFitness();
 
             for (int i = 0; i < chromArr.Length; i++) {
                 // calls copy constructor of chromosome and sets the copy chromosome;
-                _chromosomeArr[i] = new Chromosome(chromArr[i]);
+                _chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
 
             _averageFitness = calculateAverageFitness();
@@ -58,7 +63,10 @@ namespace GeneticAlgorithm
             set;
         }
 
-        // helper function
+        /// <summary>
+        /// Sums fitness of all chromosome and computes average
+        /// </summary>
+        /// <returns> double of average fitness of all chromosome </returns>
         private double calculateAverageFitness() 
         {
             // sum of fitness of all chromosomes
@@ -72,7 +80,10 @@ namespace GeneticAlgorithm
             return sum / _chromosomeArr.Length;
         }
 
-        // helper function
+        /// <summary>
+        /// Computes the highest fitness in the chromosome array and returns it.`1
+        /// </summary>
+        /// <returns> Max fitness </returns>
         private double calculateMaxFitness() 
         {
             double max = 0;
@@ -91,7 +102,7 @@ namespace GeneticAlgorithm
         public IChromosome this[int index] 
         {
             get { return _chromosomeArr[index]; }
-            set { _chromosomeArr[index] = value; }
+            set { _chromosomeArr[index] = value as Chromosome; }
         }
 
         // select random parents from top range
@@ -102,8 +113,11 @@ namespace GeneticAlgorithm
             Random rng;
             if (_seed != null) {
                 rng = new Random((int)_seed);
+            }else{
+            rng = new Random();
+
             }
-            R
+            
             // get random index from 0 to _parentRange
             int randParentIndex = rng.Next(0, _parentRange);
             return _chromosomeArr[randParentIndex];
