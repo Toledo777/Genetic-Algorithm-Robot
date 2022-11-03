@@ -147,6 +147,7 @@ namespace GeneticAlgorithm
                     {
                         fitnessSum += this._fitnessHandler(_chromosomeArr[i], this);
                     }
+
                     // assign fitness to be average of all trials for that chromosome
                     this._chromosomeArr[i].Fitness = fitnessSum / this._geneticAlgorithm.NumberOfTrials;
                 }
