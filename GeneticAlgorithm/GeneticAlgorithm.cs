@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace GeneticAlgorithm
 {
     internal class GeneticAlgorithm : IGeneticAlgorithm
@@ -24,6 +26,8 @@ namespace GeneticAlgorithm
 
         private Random _random;
 
+        private int _eliteChromosomePopulationSize;
+
         public GeneticAlgorithm(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, FitnessEventHandler fitnessCalculation, int? seed = null)
         {
             this.PopulationSize = populationSize;
@@ -34,6 +38,7 @@ namespace GeneticAlgorithm
             this.NumberOfTrials = numberOfTrials;
             this.FitnessCalculation = fitnessCalculation;
             this._seed = seed;
+            this._eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate/100));
             if (seed != null)
             {
                 _random = new Random((int)seed);
@@ -60,7 +65,6 @@ namespace GeneticAlgorithm
         }
 
         public IGeneration CurrentGeneration { get; set; }
-
 
         public IGeneration GenerateGeneration()
         {
@@ -98,28 +102,56 @@ namespace GeneticAlgorithm
             IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
             List<IChromosome> eliteChromsome = new List<IChromosome>();
             // Define fitness of the elite chromosomes
-            double eliteChromosomeFitnessLowerLimit = this.CurrentGeneration.MaxFitness - 30;
-            // Select the elite chromosomes
-            for (int i = 0; i < this.PopulationSize; i++)
+            
+            // double eliteChromosomeFitnessLowerLimit = this.CurrentGeneration.MaxFitness - 30;
+            // // Select the elite chromosomes
+            // for (int i = 0; i < this.PopulationSize; i++)
+            // {       
+            //     if (this.CurrentGeneration[i].Fitness >= eliteChromosomeFitnessLowerLimit)
+            //     {
+            //         // Check elite rate to add to list
+            //         if (this._random.NextDouble() <= (this.EliteRate / 100.00))
+            //         {
+            //             eliteChromsome.Add(this.CurrentGeneration[i]);
+            //         }
+            //     }
+            // }
+
+            // Teacher Way???
+            // Get eliteChromosomes from elite rat
+            // int eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100.00));
+            // Add a property internal of the chromsome array
+            IChromosome[] chrom = new IChromosome[12];
+            var allChromsomes = chrom.OrderByDescending(x => x.Fitness).Take(_eliteChromosomePopulationSize).ToArray();
+
+            // Get highest fitness chromosomes
+            for (int i = 0; i < allChromsomes.Length; i++)
             {
-                if (this.CurrentGeneration[i].Fitness >= eliteChromosomeFitnessLowerLimit)
-                {
-                    // Check elite rate to add to list
-                    if (this._random.NextDouble() <= (this.EliteRate / 100.00))
-                    {
-                        eliteChromsome.Add(this.CurrentGeneration[i]);
-                    }
-                }
+                eliteChromsome.Add(allChromsomes[i]);
             }
 
-            // Reproduce the elite chromosomes
-            // i is increased by 2 because we are adding 2 chromosomes at a time.
+
+            // // Select the elite chromosomes
+            // for (int i = 0; i < this.PopulationSize; i++)
+            // {       
+            //     if (this.CurrentGeneration[i].Fitness >= eliteChromosomeFitnessLowerLimit)
+            //     {
+            //         // Check elite rate to add to list
+            //         if (this._random.NextDouble() <= (this.EliteRate / 100.00))
+            //         {
+            //             eliteChromsome.Add(this.CurrentGeneration[i]);
+            //         }
+            //     }
+            // }
+
+            // Add elite chromosomes to new generation
             for (int j = 0; j < eliteChromsome.Count; j++)
             {
                 newGenerationChromosome[j] = eliteChromsome[j];
             }
 
             // Create the rest of the chromosomes
+            // z is increased by 2 because we are adding 2 chromosomes at a time.
             for (int z = eliteChromsome.Count; z < this.PopulationSize; z +=2)
             {
                 // Select the parents
