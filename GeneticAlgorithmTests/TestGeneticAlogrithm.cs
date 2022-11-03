@@ -41,5 +41,26 @@ namespace GeneticAlgorithmTests
             Assert.AreEqual(geneticAlgorithm.Seed, seed);
         }
 
+        public void Test_GenerationCount_izZero_And_NotOldGenCount()
+        {
+            int populationSize = 200;
+            int numberOfGenes = 243;
+            int lengthOfGene = 7;
+            double mutationRate = 40;
+            double eliteRate = 30;
+            int numberOfTrials = 20;
+            int? seed = 14;
+            GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
+            Assert.AreEqual(geneticAlgorithm.GenerationCount, 0);
+            geneticAlgorithm.GenerationCount += 1;
+            Assert.AreEqual(geneticAlgorithm.GenerationCount, 1);
+
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                geneticAlgorithm.GenerationCount = 0;
+            });
+        }
+
+       
     }
 }
