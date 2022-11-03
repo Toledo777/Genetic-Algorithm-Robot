@@ -61,6 +61,19 @@ namespace GeneticAlgorithmTests
             });
         }
 
-       
+        [TestMethod]
+        public void Test_Random_Seed_generatesSameNumbers()
+        {
+            int seed = 14;
+            // Test Random with seed
+            Random random = new Random(seed);
+            Assert.AreEqual(random.Next(200), 8);
+            Assert.AreEqual(random.Next(200), 185);
+            Assert.AreEqual(random.Next(200), 110);
+            Assert.AreEqual(random.Next(200), 109);
+            Assert.AreEqual(random.Next(200), 105);
+        }
+
+    
     }
 }
