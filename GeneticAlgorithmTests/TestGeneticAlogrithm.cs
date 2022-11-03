@@ -96,6 +96,28 @@ namespace GeneticAlgorithmTests
         }
 
         
-       
+        [TestMethod]
+        public void Test_GenerateGeneration_Second_Time()
+        {
+            int populationSize = 200;
+            int numberOfGenes = 243;
+            int lengthOfGene = 7;
+            double mutationRate = 40;
+            double eliteRate = 30;
+            int numberOfTrials = 20;
+            int? seed = 14;
+            // Try to create Generation
+            GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
+            IGeneration generation = geneticAlgorithm.GenerateGeneration();
+            // Generate Second Generation
+            generation = geneticAlgorithm.GenerateGeneration();
+            // Checks that current generation is set
+            Assert.AreEqual(generation, geneticAlgorithm.CurrentGeneration);
+            // Checks that Number of Chromsomes is equal to population size
+            Assert.AreEqual(generation.NumberOfChromosomes, populationSize);
+            // Checks that Generation Count is 1
+            Assert.AreEqual(geneticAlgorithm.GenerationCount, 2);
+
+        }
     }
 }
