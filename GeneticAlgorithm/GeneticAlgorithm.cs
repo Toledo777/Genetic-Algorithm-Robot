@@ -6,6 +6,10 @@ namespace GeneticAlgorithm
 {
     internal class GeneticAlgorithm : IGeneticAlgorithm
     {
+
+        private Random _random;
+
+        private int _eliteChromosomePopulationSize;
         private long _generationCount;
 
         public int PopulationSize { get; }
@@ -21,15 +25,13 @@ namespace GeneticAlgorithm
         public int NumberOfTrials { get; }
 
         public FitnessEventHandler FitnessCalculation { get; }
+        public int? Seed {get;}
 
-        private int? _seed;
 
-        private Random _random;
-
-        private int _eliteChromosomePopulationSize;
 
         public GeneticAlgorithm(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, FitnessEventHandler fitnessCalculation, int? seed = null)
         {
+            this.GenerationCount = 0;
             this.PopulationSize = populationSize;
             this.NumberOfGenes = numberOfGenes;
             this.LengthOfGene = lengthOfGene;
@@ -37,7 +39,7 @@ namespace GeneticAlgorithm
             this.EliteRate = eliteRate; // Given in %/100 tranform to decimal/1.0
             this.NumberOfTrials = numberOfTrials;
             this.FitnessCalculation = fitnessCalculation;
-            this._seed = seed;
+            this.Seed = seed;
             this._eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100));
             if (seed != null)
             {
@@ -71,11 +73,11 @@ namespace GeneticAlgorithm
             // Inital Generation - First Generation
             if (this.GenerationCount == 0)
             {
-                Generation generation = new Generation(this, this.FitnessCalculation, _seed);
+                Generation generation = new Generation(this, this.FitnessCalculation, this.Seed);
 
                 for (int i = 0; i < this.PopulationSize; i++)
                 {
-                    generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this._seed);
+                    generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
                 }
 
                 this.GenerationCount++;
@@ -150,7 +152,7 @@ namespace GeneticAlgorithm
                 }
                 else
                 {
-                    break;  
+                    break;
                 }
             }
             // Reproduce children
