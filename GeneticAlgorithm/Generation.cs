@@ -37,7 +37,7 @@ namespace GeneticAlgorithm
         }
 
         /// <summary>
-        /// Added internal property that returns the chromosome array
+        /// internal property that returns the chromosome array
         /// </summary>
         /// <returns> Chromosome[] </returns>
         internal Chromosome[] ChromosomeArr
@@ -96,7 +96,7 @@ namespace GeneticAlgorithm
         }
 
         /// <summary>
-        /// Computes the highest fitness in the chromosome array and returns it.`1
+        /// Computes the highest fitness in the chromosome array and returns it
         /// </summary>
         /// <returns> Max fitness </returns>
         private double calculateMaxFitness() 
