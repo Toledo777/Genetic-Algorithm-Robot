@@ -22,7 +22,7 @@ namespace GeneticAlgorithm
 
         public FitnessEventHandler FitnessCalculation { get; }
 
-        private int? _seed;
+        public int? Seed { get; }
 
         private Random _random;
 
@@ -37,7 +37,7 @@ namespace GeneticAlgorithm
             this.EliteRate = eliteRate; // Given in %/100 tranform to decimal/1.0
             this.NumberOfTrials = numberOfTrials;
             this.FitnessCalculation = fitnessCalculation;
-            this._seed = seed;
+            this.Seed = seed;
             this._eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100));
             if (seed != null)
             {
@@ -71,11 +71,11 @@ namespace GeneticAlgorithm
             // Inital Generation - First Generation
             if (this.GenerationCount == 0)
             {
-                Generation generation = new Generation(this, this.FitnessCalculation, _seed);
+                Generation generation = new Generation(this, this.FitnessCalculation, this.Seed);
 
                 for (int i = 0; i < this.PopulationSize; i++)
                 {
-                    generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this._seed);
+                    generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
                 }
 
                 this.GenerationCount++;
@@ -128,7 +128,7 @@ namespace GeneticAlgorithm
                 }
             }
 
-            return new Generation(newGenerationChromosome, this, this.FitnessCalculation, this._seed);
+            return new Generation(newGenerationChromosome, this, this.FitnessCalculation, this.Seed);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace GeneticAlgorithm
                 }
                 else
                 {
-                    break;  
+                    break;
                 }
             }
             // Reproduce children
