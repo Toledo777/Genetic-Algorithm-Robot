@@ -56,10 +56,16 @@ namespace GeneticAlgorithm
             set
             {
                 // Ensures that the new value is the newer genration
-                if (this._generationCount < value)
+                if (this._generationCount > value)
                 {
                     throw new ArgumentException($"You can't set an older generation Number: {this._generationCount}. to a newer one: {value}");
                 }
+                // Ensure that the new value is only one generation ahead
+                if (value - this._generationCount > 1)
+                {
+                    throw new ArgumentException($"You can't set a generation Number: {value} that is more than one generation ahead of the current generation: {this._generationCount}");
+                }
+
                 this._generationCount = value;
             }
         }
