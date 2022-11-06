@@ -8,8 +8,10 @@ namespace RobbyIterationGenerator
 
         static void Main(string[] args)
         {
+            var watch = new System.Diagnostics.Stopwatch();
+
             // string top_level_folder = "/Generated-Files/"; 
-            // Defines place to store folders       
+            // // Defines place to store folders       
             // Console.WriteLine(Environment.CurrentDirectory);
             // // User input for path
             // Console.Write("In what folder do you want to save the text files: ");
@@ -26,6 +28,7 @@ namespace RobbyIterationGenerator
             //     Console.WriteLine($"{folder_name} folder already exists in {path} \n Files will be created in it.");
             // }
 
+            watch.Start();
             // Input parameters for the generations
             bool param = true;
             int populationSize, numberOfGenes, lengthOfGene, numberOfTrials;
@@ -54,6 +57,9 @@ namespace RobbyIterationGenerator
 
                 param = false;
             }
+
+            watch.Stop();
+            Console.WriteLine(watch.ElapsedMilliseconds);
         }
     }
 }
