@@ -42,6 +42,7 @@ namespace GeneticAlgorithmTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void Test_GenerationCount_Increments()
         {
             int populationSize = 200;
@@ -59,10 +60,8 @@ namespace GeneticAlgorithmTests
             geneticAlgorithm.GenerationCount += 1;
             Assert.AreEqual(geneticAlgorithm.GenerationCount, 3);
 
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                geneticAlgorithm.GenerationCount = 0;
-            });
+            // Throws Exception
+            geneticAlgorithm.GenerationCount = 0;
         }
 
         public void Test_GenerationCount_Initalize_izZero()
@@ -79,6 +78,7 @@ namespace GeneticAlgorithmTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void Test_GenerationCount_Cant_BeOldGen_ArgumentException()
         {
             int populationSize = 200;
@@ -92,13 +92,12 @@ namespace GeneticAlgorithmTests
             geneticAlgorithm.GenerationCount += 1;
             geneticAlgorithm.GenerationCount += 1;
 
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                geneticAlgorithm.GenerationCount = 1;
-            });
+            // Throws Exception
+            geneticAlgorithm.GenerationCount = 1;
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void Test_GenerationCount_Cant_Increment_MoreThanOneGen_ArgumentException()
         {
             int populationSize = 200;
@@ -111,10 +110,9 @@ namespace GeneticAlgorithmTests
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             geneticAlgorithm.GenerationCount += 1;
 
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                geneticAlgorithm.GenerationCount += 2;
-            });
+            // Throws Exception
+            geneticAlgorithm.GenerationCount += 2;
+
         }
 
         [TestMethod]
