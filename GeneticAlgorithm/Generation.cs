@@ -11,6 +11,7 @@ namespace GeneticAlgorithm
         private FitnessEventHandler _fitnessHandler;
         private long _numberOfChromosomes;
         private const int _parentRange = 10;
+        private Random _rng;
 
         // constructor, only called the first time
         public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null)
@@ -20,6 +21,11 @@ namespace GeneticAlgorithm
             this._fitnessHandler = fitnessHandler;
             this.AverageFitness = calculateAverageFitness();
             this.MaxFitness = calculateMaxFitness();
+            
+            if (_seed != null) 
+                this._rng = new Random((int) _seed);
+            else
+                this._rng= new Random();
         }
 
         // copy constructor
@@ -32,6 +38,12 @@ namespace GeneticAlgorithm
                 // calls copy constructor of chromosome and sets the copy chromosome;
                 this._chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
+
+            if (_seed != null) 
+                this._rng = new Random((int) _seed);
+            else 
+                this._rng = new Random();
+            
         }
 
         /// <summary>
@@ -123,14 +135,9 @@ namespace GeneticAlgorithm
         {
             // sort array using CompareTo method of chromosome
             Array.Sort(_chromosomeArr);
-            Random rng;
-            if (this._seed != null)
-                rng = new Random((int)this._seed);
-            else
-                rng = new Random();
 
             // get random index from 0 to _parentRange
-            int randParentIndex = rng.Next(0, _parentRange);
+            int randParentIndex = _rng.Next(0, _parentRange);
             return this._chromosomeArr[randParentIndex];
         }
 
