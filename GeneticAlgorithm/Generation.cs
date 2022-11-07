@@ -31,9 +31,6 @@ namespace GeneticAlgorithm
                 // calls copy constructor of chromosome and sets the copy chromosome;
                 this._chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
-
-            this.AverageFitness = calculateAverageFitness();
-            this.MaxFitness = calculateMaxFitness();
         }
 
         /// <summary>
