@@ -44,7 +44,7 @@ namespace GeneticAlgorithm
 
         public long NumberOfChromosomes 
         {
-            get {return this._chromosomeArr.Length;}
+            get {return this._geneticAlgorithm.PopulationSize;}
         }
 
         public double AverageFitness 
