@@ -21,7 +21,7 @@ namespace GeneticAlgorithm
             this._fitnessHandler = fitnessHandler;
             this.AverageFitness = calculateAverageFitness();
             this.MaxFitness = calculateMaxFitness();
-            
+
             if (_seed != null) 
                 this._rng = new Random((int) _seed);
             else
@@ -38,12 +38,6 @@ namespace GeneticAlgorithm
                 // calls copy constructor of chromosome and sets the copy chromosome;
                 this._chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
-
-            if (_seed != null) 
-                this._rng = new Random((int) _seed);
-            else 
-                this._rng = new Random();
-            
         }
 
         /// <summary>
