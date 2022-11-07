@@ -1,8 +1,8 @@
- using System;
+using System;
 
 namespace GeneticAlgorithm
 {
-   
+
     public class Generation : IGenerationDetails
     {
         private Chromosome[] _chromosomeArr;
@@ -13,11 +13,11 @@ namespace GeneticAlgorithm
         private const int _parentRange = 10;
 
         // constructor, only called the first time
-        public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null) 
+        public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null)
         {
             this._seed = seed;
             this._geneticAlgorithm = geneticAlgorithm;
-            this._fitnessHandler  = fitnessHandler;
+            this._fitnessHandler = fitnessHandler;
             this.AverageFitness = calculateAverageFitness();
             this.MaxFitness = calculateMaxFitness();
         }
@@ -27,7 +27,8 @@ namespace GeneticAlgorithm
         {
             this._chromosomeArr = new Chromosome[chromArr.Length];
 
-            for (int i = 0; i < chromArr.Length; i++) {
+            for (int i = 0; i < chromArr.Length; i++)
+            {
                 // calls copy constructor of chromosome and sets the copy chromosome;
                 this._chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
@@ -39,39 +40,37 @@ namespace GeneticAlgorithm
         /// <returns> Chromosome[] </returns>
         internal Chromosome[] ChromosomeArr
         {
-            get {return this._chromosomeArr;}
+            get { return this._chromosomeArr; }
         }
 
-        public long NumberOfChromosomes 
+        public long NumberOfChromosomes
         {
-            get {return this._geneticAlgorithm.PopulationSize;}
+            get { return this._geneticAlgorithm.PopulationSize; }
         }
 
-        public double AverageFitness 
+        public double AverageFitness
         {
             get
             {
                 AverageFitness = calculateAverageFitness();
                 return AverageFitness;
             }
-            set {
-                if (value > 0) {
-                    AverageFitness = value;
-                }
+            set
+            {
+                AverageFitness = value;
             }
         }
-        
-        public double MaxFitness 
+
+        public double MaxFitness
         {
-            get 
+            get
             {
                 MaxFitness = calculateMaxFitness();
                 return MaxFitness;
             }
-            set {
-                if (value > 0) {
-                    MaxFitness = value;
-                }
+            set
+            {
+                MaxFitness = value;
             }
         }
 
@@ -79,13 +78,13 @@ namespace GeneticAlgorithm
         /// Sums fitness of all chromosome and computes average
         /// </summary>
         /// <returns> double of average fitness of all chromosome </returns>
-        private double calculateAverageFitness() 
+        private double calculateAverageFitness()
         {
             // sum of fitness of all chromosomes
             double sum = 0;
-            for (int i = 0; i < this._chromosomeArr.Length; i++) 
+            for (int i = 0; i < this._chromosomeArr.Length; i++)
             {
-                sum+= this._chromosomeArr[i].Fitness;
+                sum += this._chromosomeArr[i].Fitness;
             }
 
             // return and calculate average
@@ -96,14 +95,16 @@ namespace GeneticAlgorithm
         /// Computes the highest fitness in the chromosome array and returns it
         /// </summary>
         /// <returns> Max fitness </returns>
-        private double calculateMaxFitness() 
+        private double calculateMaxFitness()
         {
-            double max = 0;
+            // set max to fitness of first chromosome
+            double max = _chromosomeArr[0].Fitness;
 
-            // loop chromosomes to get max
-            for (int i = 0; i < this._chromosomeArr.Length; i++) 
+            // loop chromosomes to get max starting at index 1
+            for (int i = 1; i < this._chromosomeArr.Length; i++)
             {
-                if (this._chromosomeArr[i].Fitness > max) {
+                if (this._chromosomeArr[i].Fitness > max)
+                {
                     max = this._chromosomeArr[i].Fitness;
                 }
             }
@@ -111,36 +112,37 @@ namespace GeneticAlgorithm
         }
 
         // Retrieves the IChromosome from the generation
-        public IChromosome this[int index] 
+        public IChromosome this[int index]
         {
             get { return this._chromosomeArr[index]; }
             set { this._chromosomeArr[index] = value as Chromosome; }
         }
 
         // select random parents from top range
-        public IChromosome SelectParent() 
+        public IChromosome SelectParent()
         {
             // sort array using CompareTo method of chromosome
             Array.Sort(_chromosomeArr);
             Random rng;
-            if (this._seed != null) 
+            if (this._seed != null)
                 rng = new Random((int)this._seed);
             else
                 rng = new Random();
-            
+
             // get random index from 0 to _parentRange
             int randParentIndex = rng.Next(0, _parentRange);
             return this._chromosomeArr[randParentIndex];
         }
 
-        public void EvaluateFitnessOfPopulation() {
+        public void EvaluateFitnessOfPopulation()
+        {
             // evaluate fitness of each chromosome in array
-            for (int i = 0; i < _geneticAlgorithm.PopulationSize; i++) 
+            for (int i = 0; i < _geneticAlgorithm.PopulationSize; i++)
             {
                 if (this._geneticAlgorithm.NumberOfTrials > 0)
                 {
                     double fitnessSum = 0;
-                    for (int j = 0; j < _geneticAlgorithm.NumberOfTrials; j++) 
+                    for (int j = 0; j < _geneticAlgorithm.NumberOfTrials; j++)
                     {
                         fitnessSum += this._fitnessHandler(_chromosomeArr[i], this);
                     }
@@ -150,9 +152,10 @@ namespace GeneticAlgorithm
                 }
 
                 // when number of trials is 0 or negative
-                else {
+                else
+                {
                     throw new InvalidOperationException("Cannot compute fitness without at least 1 trial");
-                }     
+                }
             }
         }
     }
