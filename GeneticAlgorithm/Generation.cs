@@ -138,7 +138,7 @@ namespace GeneticAlgorithm
         public void EvaluateFitnessOfPopulation()
         {
             // evaluate fitness of each chromosome in array
-            for (int i = 0; i < _geneticAlgorithm.PopulationSize; i++)
+            for (int i = 0; i < _chromosomeArr.Length; i++)
             {
                 if (this._geneticAlgorithm.NumberOfTrials > 0)
                 {
