@@ -32,11 +32,11 @@ namespace GeneticAlgorithm
         public Chromosome(int numGenes, long geneLength, int? seed = null)
         {
             this._seed = seed;
-            NumGenes = numGenes;
-            Length = geneLength;
-            Genes = new int[numGenes];
-            Fitness = 0;
-            if(seed != null){
+            this.NumGenes = numGenes;
+            this.Length = geneLength;
+            this.Genes = new int[numGenes];
+            this.Fitness = 0;
+            if(this._seed != null){
                 this._rng = new Random((int)seed);
             }
             else{
@@ -66,6 +66,14 @@ namespace GeneticAlgorithm
 
         public IChromosome[] Reproduce(IChromosome spouse, double mutationProb)
         {
+            // int numberOfGenesInSpouse = ((Chromosome)spouse).NumGenes;
+            if(this.NumGenes != ((Chromosome)spouse).NumGenes){
+                throw new ArgumentException("Parents must have same number of genes");
+            }
+            if(this.Length != ((Chromosome)spouse).Length){
+                throw new ArgumentException("Parents' Gene length must be the same");
+            }
+
             IChromosome[] children = new Chromosome[2];
             children[0] = this.GenerateChild((Chromosome)spouse).MutateChromosome(mutationProb);
             children[1] = ((Chromosome)spouse).GenerateChild(this).MutateChromosome(mutationProb);
@@ -73,37 +81,36 @@ namespace GeneticAlgorithm
         }
         
         /// <summary>
-        ///Takes 2 chromosomes and modifies the first one with genes from the sceond one with a range chosen randomly.
+        ///Creates child with spouse chromosome
         /// </summary>
-        /// <param name="parent1">The parent whose genes will be mutated with the second parent's </param>
-        /// <param name="parent2">The parent whose genes mutate with the first parent</param>
-        /// <returns> A "child" chromosome whose genes is a combination of tis parents</returns>
+        /// <param name="spouse">The chromosome whose genes will be combind with the current chromosome to generate a child chromosome </param>
+        /// <returns> A "child" chromosome whose genes is a combination of its parents</returns>
         Chromosome GenerateChild(Chromosome spouse){
             //we want to create a start and end index, these positions will be the ones whose genes are swapped with the second parent.
-            int startIndP2 = _rng.Next(0, spouse.NumGenes-1); 
-            int endIndP2 = _rng.Next(startIndP2, this.NumGenes);
+            int startIndP2 = this._rng.Next(0, spouse.NumGenes-1); 
+            int endIndP2 = this._rng.Next(startIndP2, this.NumGenes);
             //genes to swap
-             int[] genes = new int[this.Genes.Length];
+             int[] genes = new int[this.NumGenes];
             //deep copy
-            for(int i = 0; i < this.Genes.Length; i++){
+            for(int i = 0; i < this.NumGenes; i++){
                 genes[i] = this[i];
             }
             for(int i = startIndP2; i < endIndP2; i++){
                 genes[i] = spouse[i];
             }
-            Chromosome child = new Chromosome(this.Length, genes, Seed); //need to check that NumGenes and Seed get the right things.
+            Chromosome child = new Chromosome(this.Length, genes, this.Seed); //need to check that NumGenes and Seed get the right things.
             return child;
         }
 
         /// <summary>
-        ///Mutates a rate of the mutationProb (0.1 = 10%)
+        ///Mutates at the rate of the mutationProb (eg: 0.1 = 10%, 1+ = 100%)
         /// </summary>
         /// <param name="mutationProb">A double representing the mutation probability</param>
         /// <returns>The chromosome after having been mutated. </returns>
         IChromosome MutateChromosome(double mutationProb){
             for(int i = 0; i < this.NumGenes; i++){
                 if(this._rng.NextDouble() <= mutationProb){
-                    this[i] = _rng.Next(0,(int)this.Length);
+                    this[i] =_rng.Next(0,(int)this.Length);
                 }
             }
             return this;
@@ -126,5 +133,14 @@ namespace GeneticAlgorithm
                 return -1;
             }    
         }
+        public override string ToString(){
+        string s = "Genes in Chromosome: ";
+        for(int i = 0; i < this.NumGenes; i++){
+            s += this[i] + " ";
+        }
+        return s;
+    
     }
+    
+}
 }

@@ -35,6 +35,6 @@ namespace GeneticAlgorithm
         /// </summary>
         /// <returns>The current generation</returns>
         IGeneration GenerateGeneration();
-
+            
     }
 }

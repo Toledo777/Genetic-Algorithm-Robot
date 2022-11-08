@@ -6,6 +6,10 @@ namespace GeneticAlgorithm
 {
     internal class GeneticAlgorithm : IGeneticAlgorithm
     {
+
+        private Random _random;
+
+        private int _eliteChromosomePopulationSize;
         private long _generationCount;
 
         public int PopulationSize { get; }
@@ -24,12 +28,10 @@ namespace GeneticAlgorithm
 
         public int? Seed { get; }
 
-        private Random _random;
-
-        private int _eliteChromosomePopulationSize;
 
         public GeneticAlgorithm(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, FitnessEventHandler fitnessCalculation, int? seed = null)
         {
+            this.GenerationCount = 0;
             this.PopulationSize = populationSize;
             this.NumberOfGenes = numberOfGenes;
             this.LengthOfGene = lengthOfGene;
@@ -77,13 +79,14 @@ namespace GeneticAlgorithm
             // Inital Generation - First Generation
             if (this.GenerationCount == 0)
             {
-                Generation generation = new Generation(this, this.FitnessCalculation, this.Seed);
-
+                // Generation generation = new Generation(this, this.FitnessCalculation, this.Seed);
+                IChromosome[] chromosome = new Chromosome[PopulationSize];
                 for (int i = 0; i < this.PopulationSize; i++)
                 {
-                    generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
+                    chromosome[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
                 }
 
+                Generation generation = new Generation(chromosome,this,this.FitnessCalculation,Seed);
                 this.GenerationCount++;
                 this.CurrentGeneration = generation;
 
@@ -111,7 +114,7 @@ namespace GeneticAlgorithm
             int eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100.00));
             IChromosome[] eliteChromsome = new Chromosome[this._eliteChromosomePopulationSize];
 
-            eliteChromsome = this.CurrentGeneration.ChromosomeArr.OrderByDescending(x => x.Fitness).Take(_eliteChromosomePopulationSize).ToArray();
+            eliteChromsome = (this.CurrentGeneration as Generation).ChromosomeArr.OrderByDescending(x => x.Fitness).Take(_eliteChromosomePopulationSize).ToArray();
 
             // Copy Elite Chromosomes to new Generation
             for (int i = 0; i < eliteChromsome.Length; i++)
