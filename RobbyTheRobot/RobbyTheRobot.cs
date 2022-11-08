@@ -76,6 +76,7 @@ namespace RobbyTheRobot
             ContentsOfGrid[,] grid = new ContentsOfGrid[GridSize, GridSize];
             int numberOfCans = (GridSize * GridSize) / 2;
             List<int> randomNumbers = new List<int>();
+            // generates random unique ints until we have enough to fill half of the grid
             while (randomNumbers.Count < grid.Length)
             {
                 int randomNumber = _random.Next(0, grid.Length);
@@ -84,23 +85,26 @@ namespace RobbyTheRobot
                     randomNumbers.Add(randomNumber);
                 }
             }
-
-            int index = 0;
-            for (int i = 0; i < GridSize; i++)
-            {
-                for (int j = 0; j < GridSize; j++)
-                {
-                    int legthOfGrid = GridSize-i * GridSize-j;
-                    if (randomNumbers.Contains(legthOfGrid))
-                    {
-
-                    }
-                    else
-                    {
-                        pos = ContentsOfGrid.Empty;
-                    }
-                }
+            for(int i = 0; i < randomNumbers.Count; i++){
+                int[] coords = ConvertIntToCoords(randomNumbers[i], GridSize);
+                grid[coords[0],coords[1]] = ContentsOfGrid.Can;
             }
+            // int index = 0;
+            // for (int i = 0; i < GridSize; i++)
+            // {
+            //     for (int j = 0; j < GridSize; j++)
+            //     {
+            //         int legthOfGrid = GridSize-i * GridSize-j;
+            //         if (randomNumbers.Contains(legthOfGrid))
+            //         {
+
+            //         }
+            //         else
+            //         {
+            //             pos = ContentsOfGrid.Empty;
+            //         }
+            //     }
+            // }
             return null;
 
 
