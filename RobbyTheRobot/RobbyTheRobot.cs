@@ -70,11 +70,11 @@ namespace RobbyTheRobot
             throw new NotImplementedException();
         }
 
+
         public ContentsOfGrid[,] GenerateRandomTestGrid()
         {
             ContentsOfGrid[,] grid = new ContentsOfGrid[GridSize, GridSize];
             int numberOfCans = (GridSize * GridSize) / 2;
-
             List<int> randomNumbers = new List<int>();
             while (randomNumbers.Count < grid.Length)
             {
@@ -101,11 +101,30 @@ namespace RobbyTheRobot
                     }
                 }
             }
-
-
-        }
-
             return null;
+
+
         }
+
+
+         /// <summary>
+        /// Converts an integer position to coordinates [y, x] representing the same position.
+        /// </summary>
+        /// <param name="pos">Integer representing position on the grid, range 0 to gridSize^2-1</param>
+        /// <param name="gridSize">Height and width of the grid</param>
+        /// <returns>int[] holding coordinates corresponding to the 2 ints necessary to reach an element of ContentOfGrid[,]</returns>
+        private int[] ConvertIntToCoords(int pos, int gridSize){
+            int[] coords = new int[2];
+            // Calculate height (y coord) 
+            coords[0] = pos / gridSize;
+            // Calcuates length (x position)
+            coords[1] = pos % gridSize;
+
+            return coords;
+        }
+
+        }
+        
 }
+
 }
