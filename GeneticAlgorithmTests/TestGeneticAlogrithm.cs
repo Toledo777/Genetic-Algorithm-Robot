@@ -18,7 +18,6 @@ namespace GeneticAlgorithmTests
             }
         }
 
-        // Test GenetiCalgorithm.cs
         [TestMethod]
         public void Test_GeneticAlgorithm_Properties_AreEqual()
         {
@@ -149,7 +148,7 @@ namespace GeneticAlgorithmTests
         }
 
         [TestMethod]
-        public void Test_GenerateGeneration_First_Time_Correct_Chromsome_Values()
+        public void Test_GenerateGeneration_First_Time_Correct_Chromosome_Values()
         {
             int populationSize = 200;
             int numberOfGenes = 243;
@@ -174,7 +173,7 @@ namespace GeneticAlgorithmTests
             int numberOfGenes = 243;
             int lengthOfGene = 7;
             double mutationRate = 40;
-            double eliteRate = 30;
+            double eliteRate = 10;
             int numberOfTrials = 20;
             int? seed = 14;
             // Try to create Generation

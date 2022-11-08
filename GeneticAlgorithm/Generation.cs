@@ -45,6 +45,7 @@ namespace GeneticAlgorithm
             this._maxFitness = calculateMaxFitness();
         }
 
+
         /// <summary>
         /// internal property that returns the chromosome array
         /// </summary>
