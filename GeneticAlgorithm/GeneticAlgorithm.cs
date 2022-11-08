@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GeneticAlgorithm
 {
-    internal class GeneticAlgorithm : IGeneticAlgorithm
+    public class GeneticAlgorithm : IGeneticAlgorithm
     {
 
         private Random _random;
