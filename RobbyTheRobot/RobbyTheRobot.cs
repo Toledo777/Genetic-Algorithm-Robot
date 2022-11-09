@@ -77,7 +77,8 @@ namespace RobbyTheRobot
             int numberOfCans = (GridSize * GridSize) / 2;
             List<int> randomNumbers = new List<int>();
             // generates random unique ints until we have enough to fill half of the grid
-            while (randomNumbers.Count < grid.Length)
+
+            while (randomNumbers.Count <= grid.Length/2) 
             {
                 int randomNumber = _random.Next(0, grid.Length);
                 if (!randomNumbers.Contains(randomNumber))
@@ -85,9 +86,11 @@ namespace RobbyTheRobot
                     randomNumbers.Add(randomNumber);
                 }
             }
-            for(int i = 0; i < randomNumbers.Count; i++){
+
+            for (int i = 0; i < randomNumbers.Count; i++)
+            {
                 int[] coords = ConvertIntToCoords(randomNumbers[i], GridSize);
-                grid[coords[0],coords[1]] = ContentsOfGrid.Can;
+                grid[coords[0], coords[1]] = ContentsOfGrid.Can; // may need to be -1
             }
             // int index = 0;
             // for (int i = 0; i < GridSize; i++)
@@ -111,13 +114,14 @@ namespace RobbyTheRobot
         }
 
 
-         /// <summary>
+        /// <summary>
         /// Converts an integer position to coordinates [y, x] representing the same position.
         /// </summary>
         /// <param name="pos">Integer representing position on the grid, range 0 to gridSize^2-1</param>
         /// <param name="gridSize">Height and width of the grid</param>
         /// <returns>int[] holding coordinates corresponding to the 2 ints necessary to reach an element of ContentOfGrid[,]</returns>
-        private int[] ConvertIntToCoords(int pos, int gridSize){
+        private int[] ConvertIntToCoords(int pos, int gridSize)
+        {
             int[] coords = new int[2];
             // Calculate height (y coord) 
             coords[0] = pos / gridSize;
@@ -127,8 +131,7 @@ namespace RobbyTheRobot
             return coords;
         }
 
-        }
-        
-}
+    }
 
 }
+
