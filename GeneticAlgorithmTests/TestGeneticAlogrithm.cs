@@ -7,6 +7,8 @@ namespace GeneticAlgorithmTests
     [TestClass]
     public class GeneticAlgorithmTest
     {
+        int seed = 14;
+
         public static FitnessEventHandler handler;
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -19,16 +21,9 @@ namespace GeneticAlgorithmTests
         }
 
         [TestMethod]
-        public void Test_GeneticAlgorithm_Properties_AreEqual()
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
+        public void Test_GeneticAlgorithm_Properties_AreEqual(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 30;
-            int numberOfTrials = 20;
-            int? seed = 14;
-
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             Assert.AreEqual(geneticAlgorithm.PopulationSize, populationSize);
             Assert.AreEqual(geneticAlgorithm.NumberOfGenes, numberOfGenes);
@@ -42,15 +37,10 @@ namespace GeneticAlgorithmTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Test_GenerationCount_Increments()
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
+        public void Test_GenerationCount_Increments(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 30;
-            int numberOfTrials = 20;
-            int? seed = 14;
+
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             geneticAlgorithm.GenerationCount += 1;
             Assert.AreEqual(geneticAlgorithm.GenerationCount, 1);
@@ -63,30 +53,21 @@ namespace GeneticAlgorithmTests
             geneticAlgorithm.GenerationCount = 0;
         }
 
-        public void Test_GenerationCount_Initalize_izZero()
+        [TestMethod]
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
+
+        public void Test_GenerationCount_Initalize_izZero(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 30;
-            int numberOfTrials = 20;
-            int? seed = 14;
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             Assert.AreEqual(geneticAlgorithm.GenerationCount, 0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Test_GenerationCount_Cant_BeOldGen_ArgumentException()
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
+
+        public void Test_GenerationCount_Cant_BeOldGen_ArgumentException(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 30;
-            int numberOfTrials = 20;
-            int? seed = 14;
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             geneticAlgorithm.GenerationCount += 1;
             geneticAlgorithm.GenerationCount += 1;
@@ -96,16 +77,10 @@ namespace GeneticAlgorithmTests
         }
 
         [TestMethod]
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
         [ExpectedException(typeof(ArgumentException))]
-        public void Test_GenerationCount_Cant_Increment_MoreThanOneGen_ArgumentException()
+        public void Test_GenerationCount_Cant_Increment_MoreThanOneGen_ArgumentException(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 30;
-            int numberOfTrials = 20;
-            int? seed = 14;
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             geneticAlgorithm.GenerationCount += 1;
 
@@ -117,7 +92,6 @@ namespace GeneticAlgorithmTests
         [TestMethod]
         public void Test_Random_Seed_generatesSameNumbers()
         {
-            int seed = 14;
             // Test Random with seed
             Random random = new Random(seed);
             Assert.AreEqual(random.Next(200), 8);
@@ -127,16 +101,10 @@ namespace GeneticAlgorithmTests
             Assert.AreEqual(random.Next(200), 105);
         }
 
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
         [TestMethod]
-        public void Test_GenerateGeneration_First_Time()
+        public void Test_GenerateGeneration_First_Time(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 30;
-            int numberOfTrials = 20;
-            int? seed = 14;
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration generatedGeneration = geneticAlgorithm.GenerateGeneration();
             // Checks that current generation is set
@@ -147,35 +115,25 @@ namespace GeneticAlgorithmTests
             Assert.AreEqual(geneticAlgorithm.GenerationCount, 1);
         }
 
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
         [TestMethod]
-        public void Test_GenerateGeneration_First_Time_Correct_Chromosome_Values()
+        public void Test_GenerateGeneration_First_Time_Correct_Chromosome_Values(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 30;
-            int numberOfTrials = 20;
-            int? seed = 14;
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration generatedGeneration = geneticAlgorithm.GenerateGeneration();
             IChromosome chromosome = generatedGeneration[populationSize - 42];
-            // Checks the same chromosome is returned
+            // Checks that Generation of the first generation initalized the chromsome correctly
             Assert.AreEqual(chromosome, generatedGeneration[populationSize - 42]);
+            Assert.AreEqual(chromosome, geneticAlgorithm.CurrentGeneration[populationSize - 42]);
+            Assert.AreEqual(chromosome.Genes.Length, numberOfGenes);
             Assert.AreEqual(chromosome.Length, lengthOfGene);
         }
 
 
         [TestMethod]
-        public void Test_GenerateGeneration_Second_Time()
+        [DataRowAttribute(200, 243, 7, 40, 30, 20)]
+        public void Test_GenerateGeneration_Second_Time(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials)
         {
-            int populationSize = 200;
-            int numberOfGenes = 243;
-            int lengthOfGene = 7;
-            double mutationRate = 40;
-            double eliteRate = 10;
-            int numberOfTrials = 20;
-            int? seed = 14;
             // Try to create Generation
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration generation = geneticAlgorithm.GenerateGeneration();
