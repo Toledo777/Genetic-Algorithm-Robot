@@ -1,5 +1,5 @@
 using System;
-
+using System.Diagnostics;
 namespace GeneticAlgorithm
 {
 
@@ -143,23 +143,20 @@ namespace GeneticAlgorithm
             // evaluate fitness of each chromosome in array
             for (int i = 0; i < _chromosomeArr.Length; i++)
             {
-                if (this._geneticAlgorithm.NumberOfTrials > 0)
+                // debug for when number of trials is 0 or negative
+                Debug.Assert(_geneticAlgorithm.NumberOfTrials > 0, "Cannot compute fitness without at least 1 trial");
+                double fitnessSum = 0;
+                for (int j = 0; j < _geneticAlgorithm.NumberOfTrials; j++)
                 {
-                    double fitnessSum = 0;
-                    for (int j = 0; j < _geneticAlgorithm.NumberOfTrials; j++)
-                    {
-                        fitnessSum += this._fitnessHandler(_chromosomeArr[i], this);
-                    }
-
-                    // assign fitness to be average of all trials for that chromosome
-                    this._chromosomeArr[i].Fitness = fitnessSum / this._geneticAlgorithm.NumberOfTrials;
+                    fitnessSum += this._fitnessHandler(_chromosomeArr[i], this);
                 }
 
-                // when number of trials is 0 or negative
-                else
-                {
-                    throw new InvalidOperationException("Cannot compute fitness without at least 1 trial");
-                }
+                // assign fitness to be average of all trials for that chromosome
+                this._chromosomeArr[i].Fitness = fitnessSum / this._geneticAlgorithm.NumberOfTrials;
+            
+
+                
+            
             }
         }
     }
