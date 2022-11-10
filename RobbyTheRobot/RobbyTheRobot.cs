@@ -4,7 +4,9 @@ using System.Collections.Generic;
 /**
  QUESTION FOR TEACHER: Due to walls count in the grid size??
  When do we write to a file, what is the number of moves? We think that its 200 or its how many moves it took to pick up all cans.
-
+            // MUTATION RATE 5%
+            // TEST ELITE CHROMSOME ARE CORRECT AFTER COMPUTE FITNESS IS DONE.
+            // KEEP IN MIND maybe change number of trials if input is zero to 1.
 */
 namespace RobbyTheRobot
 {
@@ -87,6 +89,10 @@ namespace RobbyTheRobot
         }
 
 
+        /// <summary>
+        /// This method creates a grid of the given size and randomly fills half the grid with cans.
+        /// </summary>
+        /// <returns>Multi Dimensional array of ContentsOfGrid[,]</returns>
         public ContentsOfGrid[,] GenerateRandomTestGrid()
         {
             ContentsOfGrid[,] grid = new ContentsOfGrid[GridSize, GridSize];
@@ -94,7 +100,7 @@ namespace RobbyTheRobot
             List<int> randomNumbers = new List<int>();
             // generates random unique ints until we have enough to fill half of the grid
 
-            while (randomNumbers.Count <= grid.Length/2) 
+            while (randomNumbers.Count <= grid.Length / 2)
             {
                 int randomNumber = _random.Next(0, grid.Length);
                 if (!randomNumbers.Contains(randomNumber))
@@ -102,31 +108,15 @@ namespace RobbyTheRobot
                     randomNumbers.Add(randomNumber);
                 }
             }
-
+        
+            // Fills half the grid with cans
             for (int i = 0; i < randomNumbers.Count; i++)
             {
                 int[] coords = ConvertIntToCoords(randomNumbers[i], GridSize);
                 grid[coords[0], coords[1]] = ContentsOfGrid.Can; // may need to be -1
             }
-            // int index = 0;
-            // for (int i = 0; i < GridSize; i++)
-            // {
-            //     for (int j = 0; j < GridSize; j++)
-            //     {
-            //         int legthOfGrid = GridSize-i * GridSize-j;
-            //         if (randomNumbers.Contains(legthOfGrid))
-            //         {
 
-            //         }
-            //         else
-            //         {
-            //             pos = ContentsOfGrid.Empty;
-            //         }
-            //     }
-            // }
-            return null;
-
-
+            return grid;
         }
 
 
