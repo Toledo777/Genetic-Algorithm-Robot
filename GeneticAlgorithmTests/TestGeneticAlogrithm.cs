@@ -173,9 +173,9 @@ namespace GeneticAlgorithmTests
                 Assert.AreEqual(generation1[0][i], generation2[0][i]);
             }
 
-                for (int i = 0; i < numberOfGenes; i++)
+            for (int i = 0; i < numberOfGenes; i++)
             {
-                Assert.AreEqual(generation1[populationSize-1][i], generation2[populationSize-1][i]);
+                Assert.AreEqual(generation1[populationSize - 1][i], generation2[populationSize - 1][i]);
             }
 
         }
