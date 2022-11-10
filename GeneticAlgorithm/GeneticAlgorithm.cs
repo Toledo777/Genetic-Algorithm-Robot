@@ -86,17 +86,28 @@ namespace GeneticAlgorithm
                     chromosome[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
                 }
 
-                Generation generation = new Generation(chromosome,this,this.FitnessCalculation,Seed);
+                Generation generation = new Generation(chromosome, this, this.FitnessCalculation, Seed);
+                generation.EvaluateFitnessOfPopulation();
+                // Sort Chromsomes by Descending Fitness
+                Array.Sort(generation.ChromosomeArr);
+                Array.Reverse(generation.ChromosomeArr);
+
                 this.GenerationCount++;
                 this.CurrentGeneration = generation;
 
-                return generation;
+                return this.CurrentGeneration;
 
             }
             else // Reproduce Generation from CurrentGeneration 
             {
-                this.CurrentGeneration = ReproduceNextGeneration();
-                this.GenerationCount++;
+                Generation generation = ReproduceNextGeneration();
+                // Sort Chromsomes by Descending Fitness
+                Array.Sort(generation.ChromosomeArr);
+                Array.Reverse(generation.ChromosomeArr);
+
+                this.GenerationCount += 1;
+                this.CurrentGeneration = generation;
+
                 return this.CurrentGeneration;
             }
         }
@@ -106,7 +117,7 @@ namespace GeneticAlgorithm
         /// of the current generation.
         /// </summary>
         /// <returns> A new reproduced generation of chromosomes </returns>
-        private IGeneration ReproduceNextGeneration()
+        private Generation ReproduceNextGeneration()
         {
             IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
 
@@ -127,7 +138,7 @@ namespace GeneticAlgorithm
             for (int z = eliteChromsome.Length; z < this.PopulationSize; z += 2)
             {
                 // Select the parents
-                IChromosome[] children = GetReproducedChildren(eliteChromsome);
+                IChromosome[] children = GetReproducedChildren(eliteChromsome); // HAS TO BE CHANGEd
 
                 newGenerationChromosome[z] = children[0];
                 // Check if there is space for another child
@@ -137,7 +148,10 @@ namespace GeneticAlgorithm
                 }
             }
 
-            return new Generation(newGenerationChromosome, this, this.FitnessCalculation, this.Seed);
+            Generation newGenerationReproduced = new Generation(newGenerationChromosome, this, this.FitnessCalculation, this.Seed);
+            newGenerationReproduced.EvaluateFitnessOfPopulation();
+
+            return newGenerationReproduced;
         }
 
         /// <summary>
