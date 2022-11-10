@@ -13,19 +13,21 @@ namespace GeneticAlgorithm
         private const int _parentRange = 10;
         private Random _rng;
 
+        private double _averageFitness;
+
+        private double _maxFitness;
+
         // constructor, only called the first time
         public Generation(IGeneticAlgorithm geneticAlgorithm, FitnessEventHandler fitnessHandler, int? seed = null)
         {
             this._seed = seed;
             this._geneticAlgorithm = geneticAlgorithm;
             this._fitnessHandler = fitnessHandler;
-            this.AverageFitness = calculateAverageFitness();
-            this.MaxFitness = calculateMaxFitness();
 
-            if (_seed != null) 
-                this._rng = new Random((int) _seed);
+            if (_seed != null)
+                this._rng = new Random((int)_seed);
             else
-                this._rng= new Random();
+                this._rng = new Random();
         }
 
         // copy constructor
@@ -38,7 +40,11 @@ namespace GeneticAlgorithm
                 // calls copy constructor of chromosome and sets the copy chromosome;
                 this._chromosomeArr[i] = new Chromosome(chromArr[i] as Chromosome);
             }
+
+            this._averageFitness = calculateAverageFitness();
+            this._maxFitness = calculateMaxFitness();
         }
+
 
         /// <summary>
         /// internal property that returns the chromosome array
@@ -58,12 +64,8 @@ namespace GeneticAlgorithm
         {
             get
             {
-                AverageFitness = calculateAverageFitness();
-                return AverageFitness;
-            }
-            set
-            {
-                AverageFitness = value;
+                _averageFitness = calculateAverageFitness();
+                return _averageFitness;
             }
         }
 
@@ -71,12 +73,8 @@ namespace GeneticAlgorithm
         {
             get
             {
-                MaxFitness = calculateMaxFitness();
-                return MaxFitness;
-            }
-            set
-            {
-                MaxFitness = value;
+                _maxFitness = calculateMaxFitness();
+                return _maxFitness;
             }
         }
 
@@ -88,13 +86,13 @@ namespace GeneticAlgorithm
         {
             // sum of fitness of all chromosomes
             double sum = 0;
-            for (int i = 0; i < this._chromosomeArr.Length; i++)
+            for (int i = 0; i < _chromosomeArr.Length; i++)
             {
-                sum += this._chromosomeArr[i].Fitness;
+                sum += _chromosomeArr[i].Fitness;
             }
 
             // return and calculate average
-            return sum / this._chromosomeArr.Length;
+            return sum / _chromosomeArr.Length;
         }
 
         /// <summary>

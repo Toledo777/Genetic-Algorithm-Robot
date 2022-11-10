@@ -25,8 +25,8 @@ namespace GeneticAlgorithm
         public int NumberOfTrials { get; }
 
         public FitnessEventHandler FitnessCalculation { get; }
-        public int? Seed {get;}
 
+        public int? Seed { get; }
 
 
         public GeneticAlgorithm(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, FitnessEventHandler fitnessCalculation, int? seed = null)
@@ -58,10 +58,16 @@ namespace GeneticAlgorithm
             set
             {
                 // Ensures that the new value is the newer genration
-                if (this._generationCount < value)
+                if (this._generationCount > value)
                 {
                     throw new ArgumentException($"You can't set an older generation Number: {this._generationCount}. to a newer one: {value}");
                 }
+                // Ensure that the new value is only one generation ahead
+                if (value - this._generationCount > 1)
+                {
+                    throw new ArgumentException($"You can't set a generation Number: {value} that is more than one generation ahead of the current generation: {this._generationCount}");
+                }
+
                 this._generationCount = value;
             }
         }
@@ -73,13 +79,14 @@ namespace GeneticAlgorithm
             // Inital Generation - First Generation
             if (this.GenerationCount == 0)
             {
-                Generation generation = new Generation(this, this.FitnessCalculation, this.Seed);
-
+                // Generation generation = new Generation(this, this.FitnessCalculation, this.Seed);
+                IChromosome[] chromosome = new Chromosome[PopulationSize];
                 for (int i = 0; i < this.PopulationSize; i++)
                 {
-                    generation[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
+                    chromosome[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
                 }
 
+                Generation generation = new Generation(chromosome,this,this.FitnessCalculation,Seed);
                 this.GenerationCount++;
                 this.CurrentGeneration = generation;
 
@@ -107,7 +114,7 @@ namespace GeneticAlgorithm
             int eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100.00));
             IChromosome[] eliteChromsome = new Chromosome[this._eliteChromosomePopulationSize];
 
-            eliteChromsome = this.CurrentGeneration.ChromosomeArr.OrderByDescending(x => x.Fitness).Take(_eliteChromosomePopulationSize).ToArray();
+            eliteChromsome = (this.CurrentGeneration as Generation).ChromosomeArr.OrderByDescending(x => x.Fitness).Take(_eliteChromosomePopulationSize).ToArray();
 
             // Copy Elite Chromosomes to new Generation
             for (int i = 0; i < eliteChromsome.Length; i++)
@@ -130,7 +137,7 @@ namespace GeneticAlgorithm
                 }
             }
 
-            return new Generation(newGenerationChromosome, this, this.FitnessCalculation, this._seed);
+            return new Generation(newGenerationChromosome, this, this.FitnessCalculation, this.Seed);
         }
 
         /// <summary>
