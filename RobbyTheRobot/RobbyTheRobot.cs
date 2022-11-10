@@ -1,16 +1,8 @@
 ﻿using System;
 using GeneticAlgorithm;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 
-/**
- QUESTION FOR TEACHER: Due to walls count in the grid size??
- When do we write to a file, what is the number of moves? We think that its 200 or its how many moves it took to pick up all cans.
-            // MUTATION RATE 5%
-            // TEST ELITE CHROMSOME ARE CORRECT AFTER COMPUTE FITNESS IS DONE.
-            // KEEP IN MIND maybe change number of trials if input is zero to 1.
-*/
 namespace RobbyTheRobot
 {
     internal class RobbyTheRobot : IRobbyTheRobot
@@ -62,6 +54,12 @@ namespace RobbyTheRobot
 
         }
 
+        ///<summary>
+        /// This method is called by the GeneticAlgorithm to compute the fitness of a chromosome.
+        /// </summary>
+        /// <param name="chromosome">The chromosome to compute the fitness of.</param>
+        /// <param name="generation">The generation the chromosome is in. - this is only to acces parameters if need be </param>
+        /// <returns>The fitness of the chromosome.</returns>
         public double ComputeFitness(IChromosome chromosome, IGeneration generation)
         {
             double score = 0;
