@@ -19,11 +19,11 @@ namespace RobbyTheRobot
 
         public int NumberOfActions { get; } // 200
 
-        public int NumberOfTestGrids { get; } 
+        public int NumberOfTestGrids { get; }
 
         public int GridSize { get; }
 
-        public int NumberOfGenerations { get; } 
+        public int NumberOfGenerations { get; }
 
         public double MutationRate { get; } //5
 
@@ -36,8 +36,8 @@ namespace RobbyTheRobot
         private GeneticAlgorithm.IGeneticAlgorithm _geneticAlgorithm;
 
 
-           public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfTrials, int? seed = null, 
-        int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10, double mutationRate = 0.05, double eliteRate = 0.1)
+        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfTrials, int? seed = null,
+     int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10, double mutationRate = 0.05, double eliteRate = 0.1)
 
         {
             this.NumberOfGenerations = numberOfGenerations;
@@ -75,19 +75,14 @@ namespace RobbyTheRobot
         //(int[] moves, ContentsOfGrid[,] grid, Random rng, ref int x, ref int y)
         public double ComputeFitness(IChromosome chromosome, IGeneration generation)
         {
-            int maximumMoves = 200;
-            int movesDone = 0;
-            int cansCollected = 0;
             double score = 0;
             int x = _random.Next(0, GridSize);
             int y = _random.Next(0, GridSize);
 
             ContentsOfGrid[,] grid = GenerateRandomTestGrid();
-            while(movesDone < maximumMoves && cansCollected < (grid.Length / 2)){
-                double res =  RobbyHelper.ScoreForAllele(chromosome.Genes, grid, this._random, ref x, ref y);
-                if(res == 10){
-                    cansCollected +=1;
-                }
+            for (int i = 0; i <= this.NumberOfActions; i++)
+            {
+                double res = RobbyHelper.ScoreForAllele(chromosome.Genes, grid, this._random, ref x, ref y);
                 score += res;
             }
 
@@ -99,7 +94,7 @@ namespace RobbyTheRobot
         public void GeneratePossibleSolutions(string folderPath)
         {
             IChromosome topChromosome = this._geneticAlgorithm.CurrentGeneration[0];
-            File.WriteAllTextAsync(folderPath, $"{topChromosome.Fitness},{this.NumberOfActions},{topChromosome.ToString()}");            
+            File.WriteAllTextAsync(folderPath, $"{topChromosome.Fitness},{this.NumberOfActions},{topChromosome.ToString()}");
         }
 
 
@@ -118,7 +113,7 @@ namespace RobbyTheRobot
                     randomNumbers.Add(randomNumber);
                 }
             }
-        
+
             // Fills half the grid with cans
             for (int i = 0; i < randomNumbers.Count; i++)
             {
