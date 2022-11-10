@@ -18,22 +18,32 @@ namespace RobbyTheRobot
 
         public int GridSize { get; }
 
-        public int NumberOfGenerations { get; }
+        public int NumberOfGenerations { get; } 
 
-        public double MutationRate { get; }
+        public double MutationRate { get; } //5
 
-        public double EliteRate { get; }
+        public double EliteRate { get; }//10
 
         private int? seed;
 
         private Random _random;
 
         private GeneticAlgorithm.IGeneticAlgorithm _geneticAlgorithm;
+        
+        
+        
+        //Does numberOfTrials refer to numberoftestgrids???
 
-
-        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfTrials, int? seed = null)
+        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfTrials, int? seed = null, 
+        int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10, double mutationRate = 0.05, double eliteRate = 0.1)
         {
             this.NumberOfGenerations = numberOfGenerations;
+            this.NumberOfTestGrids = numberOfTrials;
+            this.NumberOfActions = numberOfActions;
+            this.NumberOfTestGrids = numberOfTestGrids;
+            this.GridSize = gridSize;
+            this.MutationRate = mutationRate;
+            this.EliteRate = eliteRate;
             this.seed = seed;
             if (seed != null)
             {
