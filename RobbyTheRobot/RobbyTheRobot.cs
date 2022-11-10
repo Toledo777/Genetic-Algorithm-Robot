@@ -57,10 +57,26 @@ namespace RobbyTheRobot
         }
 
         // public delegate double FitnessEventHandler(IChromosome chromosome, IGeneration generation);
-
+        //(int[] moves, ContentsOfGrid[,] grid, Random rng, ref int x, ref int y)
         public double ComputeFitness(IChromosome chromosome, IGeneration generation)
         {
-            return 0.0;
+            int maximumMoves = 200;
+            int movesDone = 0;
+            int cansCollected = 0;
+            double score = 0;
+            int x = _random.Next(0, GridSize);
+            int y = _random.Next(0, GridSize);
+
+            ContentsOfGrid[,] grid = GenerateRandomTestGrid();
+            while(movesDone < maximumMoves && cansCollected < (grid.Length / 2)){
+                double res =  RobbyHelper.ScoreForAllele(chromosome.Genes, grid, this._random, ref x, ref y);
+                if(res == 10){
+                    cansCollected +=1;
+                }
+                score += res;
+            }
+
+            return score;
         }
 
 
