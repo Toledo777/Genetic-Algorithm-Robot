@@ -158,10 +158,17 @@ namespace GeneticAlgorithm
         }
         public override string ToString()
         {
-            string s = "Genes in Chromosome: ";
+            string s = "";
             for (int i = 0; i < this.NumGenes; i++)
             {
-                s += this[i] + " ";
+                if (i == this.NumGenes - 1)
+                {
+                    s += this[i];
+                }
+                else
+                {
+                    s += this[i] + ",";
+                }
             }
             return s;
 
