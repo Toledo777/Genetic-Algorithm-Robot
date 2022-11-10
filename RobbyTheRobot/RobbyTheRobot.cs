@@ -1,6 +1,9 @@
 ﻿using System;
 using GeneticAlgorithm;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+
 /**
  QUESTION FOR TEACHER: Due to walls count in the grid size??
  When do we write to a file, what is the number of moves? We think that its 200 or its how many moves it took to pick up all cans.
@@ -12,9 +15,11 @@ namespace RobbyTheRobot
 {
     internal class RobbyTheRobot : IRobbyTheRobot
     {
-        public int NumberOfActions { get; }
+        public event FileWritten FileWrittenEvent;
 
-        public int NumberOfTestGrids { get; }
+        public int NumberOfActions { get; } // 200
+
+        public int NumberOfTestGrids { get; } 
 
         public int GridSize { get; }
 
@@ -29,6 +34,7 @@ namespace RobbyTheRobot
         private Random _random;
 
         private GeneticAlgorithm.IGeneticAlgorithm _geneticAlgorithm;
+
 
 
         public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfTrials, int? seed = null)
@@ -85,14 +91,11 @@ namespace RobbyTheRobot
 
         public void GeneratePossibleSolutions(string folderPath)
         {
-            throw new NotImplementedException();
+            IChromosome topChromosome = this._geneticAlgorithm.CurrentGeneration[0];
+            File.WriteAllTextAsync(folderPath, $"{topChromosome.Fitness},{this.NumberOfActions},{topChromosome.ToString()}");            
         }
 
 
-        /// <summary>
-        /// This method creates a grid of the given size and randomly fills half the grid with cans.
-        /// </summary>
-        /// <returns>Multi Dimensional array of ContentsOfGrid[,]</returns>
         public ContentsOfGrid[,] GenerateRandomTestGrid()
         {
             ContentsOfGrid[,] grid = new ContentsOfGrid[GridSize, GridSize];
