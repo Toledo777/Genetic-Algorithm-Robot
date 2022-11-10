@@ -35,19 +35,22 @@ namespace RobbyTheRobot
 
         private GeneticAlgorithm.IGeneticAlgorithm _geneticAlgorithm;
 
+        private event FitnessEventHandler _fitnessCalculation;
 
-        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfTrials, int? seed = null,
-     int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10, double mutationRate = 0.05, double eliteRate = 0.1)
 
+        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfGenes, int lengthOfGene, int numberOfTrials, int? seed = null,
+         int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10, double mutationRate = 0.05, double eliteRate = 0.1)
         {
+            this._fitnessCalculation += ComputeFitness;
             this.NumberOfGenerations = numberOfGenerations;
             this.NumberOfTestGrids = numberOfTrials;
+            this.seed = seed;
             this.NumberOfActions = numberOfActions;
             this.NumberOfTestGrids = numberOfTestGrids;
             this.GridSize = gridSize;
             this.MutationRate = mutationRate;
             this.EliteRate = eliteRate;
-            this.seed = seed;
+            this._geneticAlgorithm = GeneticLib.CreateGeneticAlgorithm(populationSize, numberOfGenes,lengthOfGene, mutationRate, eliteRate, numberOfTrials, _fitnessCalculation, seed);
             if (seed != null)
             {
                 _random = new Random((int)seed);
@@ -59,20 +62,6 @@ namespace RobbyTheRobot
 
         }
 
-        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfTrials, double eliteRate, double mutationRate, int? seed = null)
-        : this(numberOfGenerations, populationSize, numberOfTrials, seed)
-        {
-            this.EliteRate = eliteRate;
-            this.MutationRate = mutationRate;
-            this.MutationRate = mutationRate;
-            this.GridSize = 10;
-            // this._geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfTrials, MutationRate, EliteRate, ComputeFitness, seed);
-
-
-        }
-
-        // public delegate double FitnessEventHandler(IChromosome chromosome, IGeneration generation);
-        //(int[] moves, ContentsOfGrid[,] grid, Random rng, ref int x, ref int y)
         public double ComputeFitness(IChromosome chromosome, IGeneration generation)
         {
             double score = 0;
