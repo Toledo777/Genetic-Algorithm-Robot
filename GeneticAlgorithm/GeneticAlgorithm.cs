@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GeneticAlgorithm
 {
-    public class GeneticAlgorithm : IGeneticAlgorithm
+    internal class GeneticAlgorithm : IGeneticAlgorithm
     {
 
         private Random _random;
@@ -138,7 +137,7 @@ namespace GeneticAlgorithm
             for (int z = eliteChromsome.Length; z < this.PopulationSize; z += 2)
             {
                 // Select the parents
-                IChromosome[] children = GetReproducedChildren(eliteChromsome); // HAS TO BE CHANGEd
+                IChromosome[] children = GetReproducedChildren(); 
 
                 newGenerationChromosome[z] = children[0];
                 // Check if there is space for another child
@@ -155,21 +154,21 @@ namespace GeneticAlgorithm
         }
 
         /// <summary>
-        /// This method selects two parents from the elite chromosomes 
+        /// This method selects two parents from the current generation
         /// and returns their reproduced children.
         /// </summary>
         /// <returns> Two children Chromosome created by elite Chromosomes. </returns>
-        private IChromosome[] GetReproducedChildren(IChromosome[] eliteChromsome)
+        private IChromosome[] GetReproducedChildren() //(IChromosome[] eliteChromsome)
         {
-            IChromosome parentA = eliteChromsome[this._random.Next(eliteChromsome.Length)];
-            IChromosome parentB = eliteChromsome[this._random.Next(eliteChromsome.Length)];
+            IChromosome parentA = (this.CurrentGeneration as Generation).SelectParent(); // eliteChromosme[this._random.Next(eliteChromsome.Length)];
+            IChromosome parentB = (this.CurrentGeneration as Generation).SelectParent();// eliteChromsome[this._random.Next(eliteChromsome.Length)];
             // Checks that two Parents are not the same
             while (true)
             {
                 // Check if parentA and parentB are the same
                 if (parentA == parentB)
                 {
-                    parentB = eliteChromsome[this._random.Next(eliteChromsome.Length)];
+                    parentB = (this.CurrentGeneration as Generation).SelectParent();//eliteChromsome[this._random.Next(eliteChromsome.Length)];
                 }
                 else
                 {
