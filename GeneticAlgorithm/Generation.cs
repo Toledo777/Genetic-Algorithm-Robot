@@ -127,6 +127,7 @@ namespace GeneticAlgorithm
         {
             // sort array using CompareTo method of chromosome
             Array.Sort(_chromosomeArr);
+            Array.Reverse(_chromosomeArr);
 
             // get random index from 0 to _parentRange
             int randParentIndex = _rng.Next(0, _parentRange);

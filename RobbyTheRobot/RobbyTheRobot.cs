@@ -30,8 +30,8 @@ namespace RobbyTheRobot
         private event FitnessEventHandler _fitnessCalculation;
 
 
-        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfGenes, int lengthOfGene, int numberOfTrials, int? seed = null,
-         int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10, double mutationRate = 0.05, double eliteRate = 0.1)
+        public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfGenes, int lengthOfGene, int numberOfTrials, double mutationRate, double eliteRate,
+         int? seed = null,int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10)
         {
             this._fitnessCalculation += ComputeFitness;
             this.FileWrittenEvent += () => { Console.WriteLine($"{this._geneticAlgorithm.GenerationCount} top chromosomes' fitness,number of moves, and genes was written to the file."); };
@@ -43,7 +43,7 @@ namespace RobbyTheRobot
             this.GridSize = gridSize;
             this.MutationRate = mutationRate;
             this.EliteRate = eliteRate;
-            this._geneticAlgorithm = GeneticLib.CreateGeneticAlgorithm(populationSize, numberOfGenes,lengthOfGene, mutationRate, eliteRate, numberOfTrials, _fitnessCalculation, seed);
+            this._geneticAlgorithm = GeneticLib.CreateGeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, _fitnessCalculation, seed);
             if (seed != null)
             {
                 _random = new Random((int)seed);
@@ -81,9 +81,13 @@ namespace RobbyTheRobot
 
         public void GeneratePossibleSolutions(string folderPath)
         {
+            this._geneticAlgorithm.GenerateGeneration();
+
+            
             IChromosome topChromosome = this._geneticAlgorithm.CurrentGeneration[0];
-            File.WriteAllTextAsync(folderPath, $"{topChromosome.Fitness},{this.NumberOfActions},{topChromosome.ToString()}");
-            this.FileWrittenEvent();
+            // File.WriteAllTextAsync(folderPath, $"{topChromosome.Fitness},{this.NumberOfActions},{topChromosome.ToString()}");
+            // this.FileWrittenEvent();
+            Console.WriteLine($"{topChromosome.Fitness}"); //,{this.NumberOfActions},{topChromosome.ToString()}");
         }
 
 

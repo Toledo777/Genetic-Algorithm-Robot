@@ -39,7 +39,7 @@ namespace GeneticAlgorithm
             this.NumberOfTrials = numberOfTrials;
             this.FitnessCalculation = fitnessCalculation;
             this.Seed = seed;
-            this._eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100));
+            this._eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate));
             if (seed != null)
             {
                 _random = new Random((int)seed);
@@ -121,7 +121,6 @@ namespace GeneticAlgorithm
             IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
 
             // Get All Elite Chromsomes
-            int eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100.00));
             IChromosome[] eliteChromsome = new Chromosome[this._eliteChromosomePopulationSize];
 
             eliteChromsome = (this.CurrentGeneration as Generation).ChromosomeArr.OrderByDescending(x => x.Fitness).Take(_eliteChromosomePopulationSize).ToArray();
