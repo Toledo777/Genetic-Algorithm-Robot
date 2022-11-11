@@ -34,6 +34,7 @@ namespace RobbyTheRobot
          int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10, double mutationRate = 0.05, double eliteRate = 0.1)
         {
             this._fitnessCalculation += ComputeFitness;
+            this.FileWrittenEvent += () => { Console.WriteLine($"{this._geneticAlgorithm.GenerationCount} top chromosomes' fitness,number of moves, and genes was written to the file."); };
             this.NumberOfGenerations = numberOfGenerations;
             this.NumberOfTestGrids = numberOfTrials;
             this.seed = seed;
@@ -82,6 +83,7 @@ namespace RobbyTheRobot
         {
             IChromosome topChromosome = this._geneticAlgorithm.CurrentGeneration[0];
             File.WriteAllTextAsync(folderPath, $"{topChromosome.Fitness},{this.NumberOfActions},{topChromosome.ToString()}");
+            this.FileWrittenEvent();
         }
 
 
