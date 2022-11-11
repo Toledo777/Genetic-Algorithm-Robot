@@ -6,6 +6,7 @@ namespace RobbyIterationGenerator
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             var watch = new System.Diagnostics.Stopwatch();
@@ -30,6 +31,7 @@ namespace RobbyIterationGenerator
 
             watch.Start();
             // Input parameters for the generations
+
             // bool param = true;
             // int populationSize, numberOfGenes, lengthOfGene, numberOfTrials;
             // double mutationRate, eliteRate;
@@ -79,6 +81,7 @@ namespace RobbyIterationGenerator
                 }
                 // robbyRobot.GeneratePossibleSolutions("dsad");
             }
+
             watch.Stop();
             Console.WriteLine(watch.ElapsedMilliseconds);
         }
