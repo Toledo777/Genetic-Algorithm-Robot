@@ -11,79 +11,132 @@ namespace RobbyIterationGenerator
         {
             var watch = new System.Diagnostics.Stopwatch();
 
-            // string top_level_folder = "/Generated-Files/"; 
-            // // Defines place to store folders       
-            // Console.WriteLine(Environment.CurrentDirectory);
-            // // User input for path
-            // Console.Write("In what folder do you want to save the text files: ");
-            // var folder_name = Console.ReadLine();
-            // // Combine User Path to local direcotry
-            // var path = System.IO.Path.Combine(Environment.CurrentDirectory, folder_name);
-            // if (!Directory.Exists(path))
-            // {
-            //     Directory.CreateDirectory(path);
-            //     Console.WriteLine($"\n\n Your generated text files will be saved in \n {path}");
-            // }
-            // else
-            // {
-            //     Console.WriteLine($"{folder_name} folder already exists in {path} \n Files will be created in it.");
-            // }
-
-            watch.Start();
-            // Input parameters for the generations
-
-            // bool param = true;
-            // int populationSize, numberOfGenes, lengthOfGene, numberOfTrials;
-            // double mutationRate, eliteRate;
-            // IRobbyTheRobot robbyRobot; 
-            // Getting the parameters value from user
-            // while (param)
-            // {
-            //     Console.WriteLine("How many is the population Size?(example : 200) : ");
-            //     if (!int.TryParse(Console.ReadLine(), out populationSize)) continue;
-            //     if( populationSize < 0) continue;
-
-            //     Console.WriteLine("How many Genes?(example : 10) : ");
-            //     if (!int.TryParse(Console.ReadLine(), out numberOfGenes)) continue;
-            //     if( numberOfGenes < 0) continue;
-
-            //     Console.WriteLine("What is the Length of the Gene? (example : 5) : ");
-            //     if (!int.TryParse(Console.ReadLine(), out lengthOfGene)) continue;
-            //     if( lengthOfGene < 0) continue;
-
-            //     Console.WriteLine("What is the mutation rate?(example : 2.0) : ");
-            //     if (!double.TryParse(Console.ReadLine(), out mutationRate)) continue;
-            //     if( mutationRate < 0) continue;
-
-            //     Console.WriteLine("What is the elite rate?(example : 2.0) : ");
-            //     if (!double.TryParse(Console.ReadLine(), out eliteRate)) continue;
-            //     if( eliteRate < 0) continue;
-
-            //     Console.WriteLine("How many trials? (example 200): ");
-            //     if (!int.TryParse(Console.ReadLine(), out numberOfTrials)) continue;
-            //     if( numberOfTrials < 0) continue;
-
-            //     param = false;
-            //     // Create RobbyTheRobot
-            // }
-
-            //var robbyRobot = Robby.createRobby(1000,populationSize,numberOfGenes,lengthOfGene,numberOfTrials,mutationRate,eliteRate, 14);
-            IRobbyTheRobot robbyRobot = Robby.createRobby(3000,200,243,7,30, 0.05, 0.1);
-
-            for (int i = 0; i < robbyRobot.NumberOfGenerations; i++)
+            // Defines place to store folders       
+            Console.WriteLine(Environment.CurrentDirectory);
+            // User input for path
+            Console.Write("In what folder do you want to save the text files: ");
+            var folder_name = Console.ReadLine();
+            // Combine User Path to local direcotry
+            var path = System.IO.Path.Combine(Environment.CurrentDirectory, folder_name);
+            if (!Directory.Exists(path))
             {
-                Console.WriteLine("Generation: " + i);
-                robbyRobot.GeneratePossibleSolutions("dsdas");
-                
-                if( i == 0 || i == 19 || i == 99 || i == 199 || i == 499|| i == 999){
-                    
-                Console.WriteLine($"Generation {i},");
-                }
-                // robbyRobot.GeneratePossibleSolutions("dsad");
+                Directory.CreateDirectory(path);
+                Console.WriteLine($"\t \t Your generated text files will be saved in \n {path}");
+            }
+            else
+            {
+                Console.WriteLine($"\n{folder_name} folder already exists in : \n{path}");
             }
 
+            // Create File path to write in
+            var file_name = "RobbyIteration.txt";
+            var file_path = System.IO.Path.Combine(path, file_name);
+            Console.WriteLine("The infromation will be written in the file: " + file_path);
+            // Start timer
+            watch.Start();
+
+            // Input parameters for the generations
+            int populationSize, numberOfGenes, lengthOfGene, numberOfTrials, numberOfGenerations, inputSeed;
+            double mutationRate, eliteRate;
+            bool noSeed = false;
+            int? nullSeed = null;
+            // Getting the parameters value from user
+            while (true)
+            {
+                Console.WriteLine("How many generations do you want? ( Recommended : 1000 ) : ");
+                if (!int.TryParse(Console.ReadLine(), out numberOfGenerations))
+                {
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+
+                if (numberOfGenerations < 0) { Console.WriteLine("No Negative number allowed."); continue; }
+
+                Console.WriteLine("How many is the population Size? ( Recommended : 200 ) : ");
+                if (!int.TryParse(Console.ReadLine(), out populationSize))
+                {
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+                if (populationSize < 0) { Console.WriteLine("No Negative number allowed."); continue; }
+
+                Console.WriteLine("How many Genes? ( Recommended: 243 ) : ");
+                if (!int.TryParse(Console.ReadLine(), out numberOfGenes))
+                {
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+                if (numberOfGenes < 0) { Console.WriteLine("No Negative number allowed."); continue; }
+
+                Console.WriteLine("What is the Length of the Gene? ( Recommended : 7 ) : ");
+                if (!int.TryParse(Console.ReadLine(), out lengthOfGene))
+                {
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+                if (lengthOfGene < 0) { Console.WriteLine("No Negative number allowed."); continue; }
+
+                Console.WriteLine("What is the mutation rate? ( Recommended : 0.05 ) : ");
+                Console.WriteLine("Write the rate from 0-1. Where 0 is 0% and 1 is 100%");
+                if (!double.TryParse(Console.ReadLine(), out mutationRate))
+                {
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+                if (mutationRate < 0 || mutationRate > 1) { Console.WriteLine("Please write the rate from 0-1. Where 0 is 0% and 1 is 100%\n"); continue; }
+
+                Console.WriteLine("What is the elite rate? ( Recommended : 0.1 ) : ");
+                Console.WriteLine("Write the rate from 0-1. Where 0 is 0% and 1 is 100%");
+                if (!double.TryParse(Console.ReadLine(), out eliteRate))
+                {
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+                if (eliteRate < 0 || eliteRate > 1) { Console.WriteLine("Please write the rate from 0-1. Where 0 is 0% and 1 is 100%\n"); continue; }
+
+                Console.WriteLine("How many trials? ( Recommended : 40 ): ");
+                if (!int.TryParse(Console.ReadLine(), out numberOfTrials))
+                {
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+                if (numberOfTrials < 0) { Console.WriteLine("No Negative number allowed."); continue; }
+
+
+                Console.WriteLine("Number of seed? ( Press enter for none ): ");
+                if (!int.TryParse(Console.ReadLine(), out inputSeed))
+                {
+                    if (inputSeed == 0){
+                        noSeed = true;
+                        break;
+                    }
+                    Console.WriteLine("Please enter a valid number!");
+                    continue;
+                }
+                break;
+            }
+
+            // Assigns userInputed seed to nullSeed
+            // Else if false - there is no seed hence nullSeed will be null.
+            if(!noSeed){
+                nullSeed = inputSeed;
+            }
+            // Create RobbyTheRobot
+            IRobbyTheRobot robbyRobot = Robby.createRobby(numberOfGenerations,populationSize,numberOfGenes,lengthOfGene,numberOfTrials,mutationRate,eliteRate, seed: nullSeed);
+
+
+            // Run Roby through grids
+            for (int i = 0; i < robbyRobot.NumberOfGenerations; i++)
+            {
+                robbyRobot.GeneratePossibleSolutions(file_path);
+            }
+
+            // Stop and Print time
             watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds);
+            Console.WriteLine($"It took {watch.ElapsedMilliseconds} miliseconds");
+            Console.WriteLine($"It took {watch.ElapsedMilliseconds / 1000} seconds");
+            Console.WriteLine($"It took {watch.ElapsedMilliseconds / 1000 / 60} minutes");
+
         }
     }
 }
