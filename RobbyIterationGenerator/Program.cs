@@ -32,8 +32,7 @@ namespace RobbyIterationGenerator
             var file_name = "RobbyIteration.txt";
             var file_path = System.IO.Path.Combine(path, file_name);
             Console.WriteLine("The infromation will be written in the file: " + file_path);
-            // Start timer
-            watch.Start();
+
 
             // Input parameters for the generations
             int populationSize, numberOfGenes, lengthOfGene, numberOfTrials, numberOfGenerations, inputSeed;
@@ -124,7 +123,9 @@ namespace RobbyIterationGenerator
             // Create RobbyTheRobot
             IRobbyTheRobot robbyRobot = Robby.createRobby(numberOfGenerations,populationSize,numberOfGenes,lengthOfGene,numberOfTrials,mutationRate,eliteRate, seed: nullSeed);
 
-
+            // Start timer
+            watch.Start();
+            
             // Run Roby through grids
             for (int i = 0; i < robbyRobot.NumberOfGenerations; i++)
             {
