@@ -31,7 +31,7 @@ namespace RobbyIterationGenerator
             // Create File path to write in
             var file_name = "RobbyIteration.txt";
             var file_path = System.IO.Path.Combine(path, file_name);
-            Console.WriteLine("The infromation will be written in the file: " + file_path);
+            Console.WriteLine("\nThe infromation will be written in the file: " + file_path +"\n");
 
 
             // Input parameters for the generations
@@ -125,7 +125,7 @@ namespace RobbyIterationGenerator
 
             // Start timer
             watch.Start();
-            
+
             // Run Roby through grids
             for (int i = 0; i < robbyRobot.NumberOfGenerations; i++)
             {
