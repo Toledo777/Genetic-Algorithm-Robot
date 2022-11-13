@@ -10,7 +10,7 @@ namespace GeneticAlgorithm
         private int? _seed;
         private FitnessEventHandler _fitnessHandler;
         private long _numberOfChromosomes;
-        private const int _parentRange = 10;
+        private const int _parentRange = 20;
         private Random _rng;
 
         private double _averageFitness;
