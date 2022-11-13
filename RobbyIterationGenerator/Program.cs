@@ -14,7 +14,7 @@ namespace RobbyIterationGenerator
             // Defines place to store folders       
             Console.WriteLine(Environment.CurrentDirectory);
             // User input for path
-            Console.Write("In what folder do you want to save the text files: ");
+            Console.Write("What is the folder name where you want your data to save?");
             var folder_name = Console.ReadLine();
             // Combine User Path to local direcotry
             var path = System.IO.Path.Combine(Environment.CurrentDirectory, folder_name);
