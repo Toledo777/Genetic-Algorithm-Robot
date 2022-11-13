@@ -14,7 +14,7 @@ namespace RobbyIterationGenerator
             // Defines place to store folders       
             Console.WriteLine(Environment.CurrentDirectory);
             // User input for path
-            Console.Write("What is the folder name where you want your data to save?");
+            Console.Write("What is the folder name where you want your data to save? : ");
             var folder_name = Console.ReadLine();
             // Combine User Path to local direcotry
             var path = System.IO.Path.Combine(Environment.CurrentDirectory, folder_name);
@@ -31,7 +31,9 @@ namespace RobbyIterationGenerator
             // Create File path to write in
             var file_name = "RobbyIteration.txt";
             var file_path = System.IO.Path.Combine(path, file_name);
-            Console.WriteLine("\nThe infromation will be written in the file: " + file_path +"\n");
+            // Create file
+            using (File.Create(file_path))
+            Console.WriteLine("\nThe infromation will be written in the file: " + file_path + "\n");
 
 
             // Input parameters for the generations
@@ -42,7 +44,7 @@ namespace RobbyIterationGenerator
             // Getting the parameters value from user
             while (true)
             {
-                Console.WriteLine("How many generations do you want? ( Recommended : 1000 ) : ");
+                Console.Write("How many generations do you want? ( Recommended : 1000 ) : ");
                 if (!int.TryParse(Console.ReadLine(), out numberOfGenerations))
                 {
                     Console.WriteLine("Please enter a valid number!");
@@ -51,7 +53,7 @@ namespace RobbyIterationGenerator
 
                 if (numberOfGenerations < 0) { Console.WriteLine("No Negative number allowed."); continue; }
 
-                Console.WriteLine("How many is the population Size? ( Recommended : 200 ) : ");
+                Console.Write("How many is the population Size? ( Recommended : 200 ) : ");
                 if (!int.TryParse(Console.ReadLine(), out populationSize))
                 {
                     Console.WriteLine("Please enter a valid number!");
@@ -59,7 +61,7 @@ namespace RobbyIterationGenerator
                 }
                 if (populationSize < 0) { Console.WriteLine("No Negative number allowed."); continue; }
 
-                Console.WriteLine("How many Genes? ( Recommended: 243 ) : ");
+                Console.Write("How many Genes? ( Recommended: 243 ) : ");
                 if (!int.TryParse(Console.ReadLine(), out numberOfGenes))
                 {
                     Console.WriteLine("Please enter a valid number!");
@@ -67,7 +69,7 @@ namespace RobbyIterationGenerator
                 }
                 if (numberOfGenes < 0) { Console.WriteLine("No Negative number allowed."); continue; }
 
-                Console.WriteLine("What is the Length of the Gene? ( Recommended : 7 ) : ");
+                Console.Write("What is the Length of the Gene? ( Recommended : 7 ) : ");
                 if (!int.TryParse(Console.ReadLine(), out lengthOfGene))
                 {
                     Console.WriteLine("Please enter a valid number!");
@@ -75,8 +77,8 @@ namespace RobbyIterationGenerator
                 }
                 if (lengthOfGene < 0) { Console.WriteLine("No Negative number allowed."); continue; }
 
-                Console.WriteLine("What is the mutation rate? ( Recommended : 0.05 ) : ");
                 Console.WriteLine("Write the rate from 0-1. Where 0 is 0% and 1 is 100%");
+                Console.Write("What is the mutation rate? ( Recommended : 0.05 ) : ");
                 if (!double.TryParse(Console.ReadLine(), out mutationRate))
                 {
                     Console.WriteLine("Please enter a valid number!");
@@ -84,8 +86,8 @@ namespace RobbyIterationGenerator
                 }
                 if (mutationRate < 0 || mutationRate > 1) { Console.WriteLine("Please write the rate from 0-1. Where 0 is 0% and 1 is 100%\n"); continue; }
 
-                Console.WriteLine("What is the elite rate? ( Recommended : 0.1 ) : ");
                 Console.WriteLine("Write the rate from 0-1. Where 0 is 0% and 1 is 100%");
+                Console.Write("What is the elite rate? ( Recommended : 0.1 ) : ");
                 if (!double.TryParse(Console.ReadLine(), out eliteRate))
                 {
                     Console.WriteLine("Please enter a valid number!");
@@ -93,19 +95,20 @@ namespace RobbyIterationGenerator
                 }
                 if (eliteRate < 0 || eliteRate > 1) { Console.WriteLine("Please write the rate from 0-1. Where 0 is 0% and 1 is 100%\n"); continue; }
 
-                Console.WriteLine("How many trials? ( Recommended : 40 ): ");
+                Console.Write("How many trials? ( Recommended : 40 ): ");
                 if (!int.TryParse(Console.ReadLine(), out numberOfTrials))
                 {
                     Console.WriteLine("Please enter a valid number!");
                     continue;
                 }
-                if (numberOfTrials < 0) { Console.WriteLine("No Negative number allowed."); continue; }
+                if (numberOfTrials < 1) { Console.WriteLine("Number of Trials must at least be 1."); continue; }
 
 
-                Console.WriteLine("Number of seed? ( Press enter for none ): ");
+                Console.Write("Number of seed? ( Press enter for none ): ");
                 if (!int.TryParse(Console.ReadLine(), out inputSeed))
                 {
-                    if (inputSeed == 0){
+                    if (inputSeed == 0)
+                    {
                         noSeed = true;
                         break;
                     }
@@ -117,11 +120,12 @@ namespace RobbyIterationGenerator
 
             // Assigns userInputed seed to nullSeed
             // Else if false - there is no seed hence nullSeed will be null.
-            if(!noSeed){
+            if (!noSeed)
+            {
                 nullSeed = inputSeed;
             }
             // Create RobbyTheRobot
-            IRobbyTheRobot robbyRobot = Robby.createRobby(numberOfGenerations,populationSize,numberOfGenes,lengthOfGene,numberOfTrials,mutationRate,eliteRate, seed: nullSeed);
+            IRobbyTheRobot robbyRobot = Robby.createRobby(numberOfGenerations, populationSize, numberOfGenes, lengthOfGene, numberOfTrials, mutationRate, eliteRate, seed: nullSeed);
 
             // Start timer
             watch.Start();
