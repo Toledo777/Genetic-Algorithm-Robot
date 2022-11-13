@@ -85,7 +85,7 @@ namespace GeneticAlgorithmTests
         {
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration gen = geneticAlgorithm.GenerateGeneration();
-      
+            IChromosome actual = (gen as Generation).SelectParent();
         }
 
         // Tests the EvaluatePopulationFitness method
