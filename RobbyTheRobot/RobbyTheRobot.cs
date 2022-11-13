@@ -9,7 +9,7 @@ namespace RobbyTheRobot
     {
         public event FileWritten FileWrittenEvent;
 
-        public int NumberOfActions { get; } // 200
+        public int NumberOfActions { get; }
 
         public int NumberOfTestGrids { get; }
 
@@ -17,9 +17,9 @@ namespace RobbyTheRobot
 
         public int NumberOfGenerations { get; }
 
-        public double MutationRate { get; } //5
+        public double MutationRate { get; } 
 
-        public double EliteRate { get; }//10
+        public double EliteRate { get; }
 
         private int? seed;
 
@@ -31,10 +31,10 @@ namespace RobbyTheRobot
 
 
         public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfGenes, int lengthOfGene, int numberOfTrials, double mutationRate, double eliteRate,
-         int? seed = null,int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10)
+         int? seed = null, int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10)
         {
             this._fitnessCalculation += ComputeFitness;
-            this.FileWrittenEvent += () => { Console.WriteLine($"{this._geneticAlgorithm.GenerationCount} top chromosomes' fitness,number of moves, and genes was written to the file."); };
+            this.FileWrittenEvent += () => { Console.WriteLine($"Generation {this._geneticAlgorithm.GenerationCount}s' top chromosomes' fitness,number of moves, and genes was written to the file."); };
             this.NumberOfGenerations = numberOfGenerations;
             this.NumberOfTestGrids = numberOfTrials;
             this.seed = seed;
@@ -82,12 +82,17 @@ namespace RobbyTheRobot
         public void GeneratePossibleSolutions(string folderPath)
         {
             this._geneticAlgorithm.GenerateGeneration();
-
-            
             IChromosome topChromosome = this._geneticAlgorithm.CurrentGeneration[0];
-            // File.WriteAllTextAsync(folderPath, $"{topChromosome.Fitness},{this.NumberOfActions},{topChromosome.ToString()}");
-            // this.FileWrittenEvent();
-            Console.WriteLine($"{topChromosome.Fitness}"); //,{this.NumberOfActions},{topChromosome.ToString()}");
+            // Write the following generations to file.
+            if (this._geneticAlgorithm.GenerationCount == 1 || this._geneticAlgorithm.GenerationCount == 19 || this._geneticAlgorithm.GenerationCount == 99
+             || this._geneticAlgorithm.GenerationCount == 199 || this._geneticAlgorithm.GenerationCount == 499 || this._geneticAlgorithm.GenerationCount == 999)
+            {
+                // Create string from top chromosome
+                string line = $"{this._geneticAlgorithm.CurrentGeneration[0].Fitness},{this.NumberOfActions},{this._geneticAlgorithm.CurrentGeneration[0].ToString()}";
+                // Append to file
+                File.AppendAllLinesAsync(folderPath, new List<string> { line });
+                this.FileWrittenEvent();
+            }
         }
 
 
@@ -111,7 +116,7 @@ namespace RobbyTheRobot
             for (int i = 0; i < randomNumbers.Count; i++)
             {
                 int[] coords = ConvertIntToCoords(randomNumbers[i], GridSize);
-                grid[coords[0], coords[1]] = ContentsOfGrid.Can; // may need to be -1
+                grid[coords[0], coords[1]] = ContentsOfGrid.Can; 
             }
 
             return grid;
