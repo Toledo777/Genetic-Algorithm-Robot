@@ -21,12 +21,9 @@ namespace RobbyIterationGenerator
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Console.WriteLine($"\t \t Your generated text files will be saved in \n {path}");
             }
-            else
-            {
-                Console.WriteLine($"\n{folder_name} folder already exists in : \n{path}");
-            }
+            Console.WriteLine($"\t \t Your generated text files will be saved in : \n {path}");
+
 
             // Create File path to write in
             var file_name = "RobbyIteration.txt";
