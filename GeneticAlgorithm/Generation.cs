@@ -10,6 +10,8 @@ namespace GeneticAlgorithm
         private int? _seed;
         private FitnessEventHandler _fitnessHandler;
         private long _numberOfChromosomes;
+
+        // Range to select the chromsome for selectParent()
         private const int _parentRange = 20;
         private Random _rng;
 

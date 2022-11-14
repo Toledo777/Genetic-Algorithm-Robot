@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GeneticAlgorithm
@@ -40,7 +39,7 @@ namespace GeneticAlgorithm
             this.NumberOfTrials = numberOfTrials;
             this.FitnessCalculation = fitnessCalculation;
             this.Seed = seed;
-            this._eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100));
+            this._eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate));
             if (seed != null)
             {
                 _random = new Random((int)seed);
@@ -86,17 +85,28 @@ namespace GeneticAlgorithm
                     chromosome[i] = new Chromosome(this.NumberOfGenes, this.LengthOfGene, this.Seed);
                 }
 
-                Generation generation = new Generation(chromosome,this,this.FitnessCalculation,Seed);
+                Generation generation = new Generation(chromosome, this, this.FitnessCalculation, Seed);
+                generation.EvaluateFitnessOfPopulation();
+                // Sort Chromsomes by Descending Fitness
+                Array.Sort(generation.ChromosomeArr);
+                Array.Reverse(generation.ChromosomeArr);
+
                 this.GenerationCount++;
                 this.CurrentGeneration = generation;
 
-                return generation;
+                return this.CurrentGeneration;
 
             }
             else // Reproduce Generation from CurrentGeneration 
             {
-                this.CurrentGeneration = ReproduceNextGeneration();
-                this.GenerationCount++;
+                Generation generation = ReproduceNextGeneration();
+                // Sort Chromsomes by Descending Fitness
+                Array.Sort(generation.ChromosomeArr);
+                Array.Reverse(generation.ChromosomeArr);
+
+                this.GenerationCount += 1;
+                this.CurrentGeneration = generation;
+
                 return this.CurrentGeneration;
             }
         }
@@ -106,12 +116,11 @@ namespace GeneticAlgorithm
         /// of the current generation.
         /// </summary>
         /// <returns> A new reproduced generation of chromosomes </returns>
-        private IGeneration ReproduceNextGeneration()
+        private Generation ReproduceNextGeneration()
         {
             IChromosome[] newGenerationChromosome = new IChromosome[PopulationSize];
 
             // Get All Elite Chromsomes
-            int eliteChromosomePopulationSize = (int)(this.PopulationSize * (this.EliteRate / 100.00));
             IChromosome[] eliteChromsome = new Chromosome[this._eliteChromosomePopulationSize];
 
             eliteChromsome = (this.CurrentGeneration as Generation).ChromosomeArr.OrderByDescending(x => x.Fitness).Take(_eliteChromosomePopulationSize).ToArray();
@@ -127,7 +136,7 @@ namespace GeneticAlgorithm
             for (int z = eliteChromsome.Length; z < this.PopulationSize; z += 2)
             {
                 // Select the parents
-                IChromosome[] children = GetReproducedChildren(eliteChromsome);
+                IChromosome[] children = GetReproducedChildren(); 
 
                 newGenerationChromosome[z] = children[0];
                 // Check if there is space for another child
@@ -137,25 +146,28 @@ namespace GeneticAlgorithm
                 }
             }
 
-            return new Generation(newGenerationChromosome, this, this.FitnessCalculation, this.Seed);
+            Generation newGenerationReproduced = new Generation(newGenerationChromosome, this, this.FitnessCalculation, this.Seed);
+            newGenerationReproduced.EvaluateFitnessOfPopulation();
+
+            return newGenerationReproduced;
         }
 
         /// <summary>
-        /// This method selects two parents from the elite chromosomes 
+        /// This method selects two parents from the current generation
         /// and returns their reproduced children.
         /// </summary>
         /// <returns> Two children Chromosome created by elite Chromosomes. </returns>
-        private IChromosome[] GetReproducedChildren(IChromosome[] eliteChromsome)
+        private IChromosome[] GetReproducedChildren() //(IChromosome[] eliteChromsome)
         {
-            IChromosome parentA = eliteChromsome[this._random.Next(eliteChromsome.Length)];
-            IChromosome parentB = eliteChromsome[this._random.Next(eliteChromsome.Length)];
+            IChromosome parentA = (this.CurrentGeneration as Generation).SelectParent(); // eliteChromosme[this._random.Next(eliteChromsome.Length)];
+            IChromosome parentB = (this.CurrentGeneration as Generation).SelectParent();// eliteChromsome[this._random.Next(eliteChromsome.Length)];
             // Checks that two Parents are not the same
             while (true)
             {
                 // Check if parentA and parentB are the same
                 if (parentA == parentB)
                 {
-                    parentB = eliteChromsome[this._random.Next(eliteChromsome.Length)];
+                    parentB = (this.CurrentGeneration as Generation).SelectParent();//eliteChromsome[this._random.Next(eliteChromsome.Length)];
                 }
                 else
                 {
