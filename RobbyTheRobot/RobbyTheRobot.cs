@@ -103,7 +103,7 @@ namespace RobbyTheRobot
             List<int> randomNumbers = new List<int>();
             // generates random unique ints until we have enough to fill half of the grid
 
-            while (randomNumbers.Count <= grid.Length / 2)
+            while (randomNumbers.Count < grid.Length / 2)
             {
                 int randomNumber = _random.Next(0, grid.Length);
                 if (!randomNumbers.Contains(randomNumber))
