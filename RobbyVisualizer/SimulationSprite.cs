@@ -4,19 +4,22 @@ using Microsoft.Xna.Framework.Input;
 
 namespace RobbyVisualizer
 {
-    public class SimulationSprite: Game
+    public class SimulationSprite: DrawableGameComponent
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        public SimulationSprite()
+        private Tile _tile;
+        private RobbyVisualizerGame _game;
+        private Texture2D _tileTexture;
+        public SimulationSprite(RobbyVisualizerGame game, Tile tile)
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            // this._tile = new Tile(isCan, isRobby);
+            this._game = game;
+            this._tile = tile;
         }
      
 
-        protected override void Initialize()
+        public override void Initialize()
         {
             // TODO: Add your initialization logic here
 
@@ -26,26 +29,28 @@ namespace RobbyVisualizer
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            if(_tile.IsCan){
+                _tileTexture = _game.Content.Load<Texture2D>("can");
+            }
+            if(_tile.IsRobby){
+                _tileTexture = _game.Content.Load<Texture2D>("robby");
+            }
+            base.LoadContent();
         }
 
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
+            // LoadContent(); //this may be all the updating we need. Assumes we update the tile in the main app.
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
+            _spriteBatch.Draw(_tileTexture, new Vector2(10,10));
             base.Draw(gameTime);
         }
     }

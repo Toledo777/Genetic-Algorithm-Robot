@@ -19,6 +19,9 @@ namespace RobbyVisualizer
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            Tile t = new Tile(true, true);
+            SimulationSprite s = new SimulationSprite(this, t);
+            Components.Add(s);
 
             base.Initialize();
         }
