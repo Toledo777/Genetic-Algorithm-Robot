@@ -14,6 +14,7 @@ namespace RobbyVisualizer
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private IRobbyTheRobot _robot;
+        private ContentsOfGrid[,] _grid;
 
         public RobbyVisualizerGame()
         {
@@ -29,6 +30,7 @@ namespace RobbyVisualizer
 
             base.Initialize();
             _robot = Robby.createRobby(1, 2, 3, 4, 5, 6.0, 7.0);
+            _grid = _robot.GenerateRandomTestGrid();
         }
 
         protected override void LoadContent()
