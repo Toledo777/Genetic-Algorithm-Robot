@@ -1,9 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GeneticAlgorithm;
-
+using System;
 namespace GeneticAlgorithmTests
 {
-    
+
     [TestClass]
     public class GenerationTests
     {
@@ -30,15 +30,14 @@ namespace GeneticAlgorithmTests
             IGeneration gen = geneticAlgorithm.GenerateGeneration();
 
             // generates a new generation based of the previous one, uses the 2nd generation constructor
-            if (regenerate) {
-
+            if (regenerate)
                 gen = geneticAlgorithm.GenerateGeneration();
-            }
 
             double actualAverage = gen.AverageFitness;
             double expected = 0;
 
-            for (int i = 0;  i < gen.NumberOfChromosomes; i++) {
+            for (int i = 0; i < gen.NumberOfChromosomes; i++)
+            {
                 expected += gen[i].Fitness;
             }
 
@@ -60,10 +59,8 @@ namespace GeneticAlgorithmTests
             IGeneration gen = geneticAlgorithm.GenerateGeneration();
 
             // generates a new generation based of the previous one, uses the 2nd generation constructor
-            if (regenerate) {
-
+            if (regenerate)
                 gen = geneticAlgorithm.GenerateGeneration();
-            }
 
             double maxActual = gen.MaxFitness;
             double expected = gen[0].Fitness;
@@ -92,20 +89,18 @@ namespace GeneticAlgorithmTests
             int parentRange = 20;
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration gen = geneticAlgorithm.GenerateGeneration();
-            
+
             // generates a new generation based of the previous one, uses the 2nd generation constructor
-            if (regenerate) {
-
+            if (regenerate)
                 gen = geneticAlgorithm.GenerateGeneration();
-            }
 
-            
             IChromosome selectedParent = (gen as Generation).SelectParent();
 
             // there should be at most 19 better parents
             int betterParent = 0;
 
-            for (int i = 0; i < gen.NumberOfChromosomes; i++) {
+            for (int i = 0; i < gen.NumberOfChromosomes; i++)
+            {
                 if (gen[i].Fitness > selectedParent.Fitness)
                 {
                     // count amount off chromosomes with higher fitness then parent
@@ -120,11 +115,46 @@ namespace GeneticAlgorithmTests
 
         // Tests the EvaluatePopulationFitness method
         [TestMethod]
-        public void TestEvaluatePopFitness(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, int seed)
+        [DataRowAttribute(200, 243, 7, 40, 30, 21, 1111111, false)]
+        [DataRowAttribute(200, 243, 7, 40, 30, 2, 63497, true)]
+        [DataRowAttribute(200, 243, 7, 40, 30, 1, 43555, false)]
+        [DataRowAttribute(200, 243, 7, 40, 30, 7, 96688, true)]
+        public void TestEvaluatePopFitness(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, int seed, bool regenerate)
         {
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration gen = geneticAlgorithm.GenerateGeneration();
-       
+
+            if (regenerate)
+                gen = geneticAlgorithm.GenerateGeneration();
+
+            (gen as Generation).EvaluateFitnessOfPopulation();
+
+            // 2.0 is the fitness returned by the mock handler
+            double expected = populationSize * 2.0;
+            double actualSum = 0;
+            // calculate sum of all fitness to verify that handler is being called correctly
+            for (int i = 0; i < gen.NumberOfChromosomes; i++)
+            {
+                actualSum += gen[i].Fitness;
+            }
+
+            Assert.AreEqual(expected, actualSum);
         }
+
+        // not sure if this test is needed, if GeneticAlgorithm prevents this error then the exception will never be called
+
+        // [TestMethod]
+        // [ExpectedException(typeof(InvalidOperationException))]
+        // [DataRowAttribute(200, 243, 7, 40, 30, 0, 1111111, false)]
+        // [DataRowAttribute(200, 243, 7, 40, 30, 0, 63497, true)]
+        // public void TestEvaluatePopFitnessException(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, int seed, bool regenerate)
+        // {
+        //     GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
+            
+        //     // generating a generation should automatically call EvalutePopulationFitness
+        //     IGeneration gen = geneticAlgorithm.GenerateGeneration();
+        //     if (regenerate)
+        //         gen = geneticAlgorithm.GenerateGeneration();
+        // }
     }
 }
