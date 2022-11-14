@@ -58,6 +58,7 @@ namespace GeneticAlgorithmTests
         {
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration gen = geneticAlgorithm.GenerateGeneration();
+
             // generates a new generation based of the previous one, uses the 2nd generation constructor
             if (regenerate) {
 
@@ -81,11 +82,40 @@ namespace GeneticAlgorithmTests
 
         // Test that SelectParent returns an IChromosome in the correct range
         [TestMethod]
-        public void TestSelectParent(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, int seed)
+        [DataRowAttribute(200, 243, 7, 40, 30, 20, 223545, false)]
+        [DataRowAttribute(200, 243, 7, 40, 30, 20, 345497, true)]
+        [DataRowAttribute(200, 243, 7, 40, 30, 20, 465, false)]
+        [DataRowAttribute(200, 243, 7, 40, 30, 20, 94, true)]
+        public void TestSelectParent(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, int seed, bool regenerate)
         {
+
+            int parentRange = 20;
             GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
             IGeneration gen = geneticAlgorithm.GenerateGeneration();
-            IChromosome actual = (gen as Generation).SelectParent();
+            
+            // generates a new generation based of the previous one, uses the 2nd generation constructor
+            if (regenerate) {
+
+                gen = geneticAlgorithm.GenerateGeneration();
+            }
+
+            
+            IChromosome selectedParent = (gen as Generation).SelectParent();
+
+            // there should be at most 19 better parents
+            int betterParent = 0;
+
+            for (int i = 0; i < gen.NumberOfChromosomes; i++) {
+                if (gen[i].Fitness > selectedParent.Fitness)
+                {
+                    // count amount off chromosomes with higher fitness then parent
+                    betterParent++;
+                }
+            }
+
+            // check to make sure that there is less then 20 better parents
+            // test that select parent is getting parents from the correct range
+            Assert.IsTrue(betterParent < parentRange);
         }
 
         // Tests the EvaluatePopulationFitness method
