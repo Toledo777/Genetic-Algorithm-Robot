@@ -17,6 +17,7 @@ namespace RobbyVisualizer
         private int[] _moves;
         private int _moveCount;
         private int _currentScore;
+        private int _maxMoves;
 
         public RobbyVisualizerGame()
         {
@@ -33,6 +34,7 @@ namespace RobbyVisualizer
             Random _rng = new Random();
             _moveCount = 0;
             _currentScore = 0;
+            _maxMoves = _robot.NumberOfActions;
         }
 
         protected override void LoadContent()
@@ -77,10 +79,26 @@ namespace RobbyVisualizer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
-            _grid = _robot.GenerateRandomTestGrid();
-            // call score for allele
-            RobbyHelper.ScoreForAllele(_moves, _grid, _rng, _rng.Next(0, 10), _rng.Next(0 , 10));
-            _moveCount++;
+            // reset moves if max is reached
+            if (_moveCount == _maxMoves) {
+                _moveCount = 0;
+                _currentScore = 0;
+                // TODO, read next file
+            }
+
+            // first move
+            if (_moveCount == 0) {
+                _grid = _robot.GenerateRandomTestGrid();
+                // call score for allele
+                _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, _rng.Next(10), _rng.Next(10));
+                _moveCount++;
+            }
+
+            else if (_moveCount > 0) {
+                // TODO extract move from gene
+                // _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, , );
+            }
+
 
             base.Update(gameTime);
         }
