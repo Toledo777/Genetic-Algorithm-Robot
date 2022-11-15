@@ -54,8 +54,8 @@ namespace RobbyVisualizer
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 2;
+                // openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                // openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -74,10 +74,7 @@ namespace RobbyVisualizer
             }
 
             // split string by comma
-            String[] fileElements = fileContent.Split(",", StringSplitOptions.RemoveEmptyEntries);
-            // TODO take out uneeded values not part of moves
-            // send the moves to an int[]
-            int[] robbyMoves = Array.ConvertAll(fileElements, s => int.Parse(s));
+            
             // MessageBox.Show(fileContent, "File Content at path: " + filePath, MessageBoxButtons.OK);
         }
 
@@ -120,5 +117,16 @@ namespace RobbyVisualizer
 
             base.Draw(gameTime);
         }
+
+        private void readFile(String filePath) {
+            // TODO read file
+
+            // split file
+            String[] fileElements = fileContent.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            // TODO take out uneeded values not part of moves
+
+            // send the moves to an int[]
+            _moves = Array.ConvertAll(fileElements, s => int.Parse(s));
+        } 
     }
 }
