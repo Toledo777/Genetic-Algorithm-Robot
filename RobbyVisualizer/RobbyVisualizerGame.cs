@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
 using RobbyTheRobot;
-using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms;
 
 namespace RobbyVisualizer
@@ -15,6 +14,7 @@ namespace RobbyVisualizer
         private SpriteBatch _spriteBatch;
         private IRobbyTheRobot _robot;
         private ContentsOfGrid[,] _grid;
+        private int[] _moves;
 
         public RobbyVisualizerGame()
         {
@@ -29,6 +29,7 @@ namespace RobbyVisualizer
             // TODO: Add your initialization logic here 
 
             base.Initialize();
+            // fill robby with preset values, not important as they are not used
             _robot = Robby.createRobby(1, 2, 3, 4, 5, 6.0, 7.0);
             _grid = _robot.GenerateRandomTestGrid();
         }
@@ -40,6 +41,7 @@ namespace RobbyVisualizer
             var fileContent = string.Empty;
             var filePath = string.Empty;
 
+            // open a file dialog box
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
@@ -62,6 +64,11 @@ namespace RobbyVisualizer
                 }
             }
 
+            // split string by comma
+            String[] fileElements = fileContent.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            // TODO take out uneeded values not part of moves
+            // send the moves to an int[]
+            int[] robbyMoves = Array.ConvertAll(fileElements, s => int.Parse(s));
             // MessageBox.Show(fileContent, "File Content at path: " + filePath, MessageBoxButtons.OK);
         }
 
@@ -70,6 +77,7 @@ namespace RobbyVisualizer
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
 
+            RobbyHelper.ScoreForAllele();
             // TODO: Add your update logic here
 
             base.Update(gameTime);
