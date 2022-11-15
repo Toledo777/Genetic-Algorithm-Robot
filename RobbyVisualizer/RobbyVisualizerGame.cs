@@ -16,7 +16,7 @@ namespace RobbyVisualizer
         private ContentsOfGrid[,] _grid;
         private int[] _moves;
         private int _moveCount;
-        private int _currentScore;
+        private double _currentScore;
         private int _maxMoves;
         private int _posX;
         private int _posY;
