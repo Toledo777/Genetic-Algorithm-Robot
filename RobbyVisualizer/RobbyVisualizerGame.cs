@@ -39,8 +39,8 @@ namespace RobbyVisualizer
             _moveCount = 0;
             _currentScore = 0;
             _maxMoves = _robot.NumberOfActions;
-            _posX = _rng(10);
-            _posY = _rng(10);
+            _posX = _rng.Next(10);
+            _posY = _rng.Next(10);
         }
 
         protected override void LoadContent()
