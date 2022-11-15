@@ -48,22 +48,15 @@ namespace RobbyVisualizer
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            var fileContent = string.Empty;
-
             // open a file dialog box
             using (var folderDialog = new FolderBrowserDialog())
             {
-            
                 if (folderDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
                 {
                     // Get paths of all files in folder (full path)
                     _solutionFiles = Directory.GetFiles(folderDialog.SelectedPath);
                 }
             }
-
-            // split string by comma
-            
-            // MessageBox.Show(fileContent, "File Content at path: " + filePath, MessageBoxButtons.OK);
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,7 +64,8 @@ namespace RobbyVisualizer
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
             // reset moves if max is reached
-            if (_moveCount == _maxMoves) {
+            if (_moveCount == _maxMoves)
+            {
                 // reset coords to rand position from 0 to 10
                 _posX = _rng.Next(10);
                 _posY = _rng.Next(10);
@@ -81,7 +75,8 @@ namespace RobbyVisualizer
             }
 
             // first move of generation
-            if (_moveCount == 0) {
+            if (_moveCount == 0)
+            {
                 // new grid
                 _grid = _robot.GenerateRandomTestGrid();
                 // call score for allele
@@ -89,7 +84,8 @@ namespace RobbyVisualizer
                 _moveCount++;
             }
 
-            else if (_moveCount > 0) {
+            else if (_moveCount > 0)
+            {
                 _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
                 _moveCount++;
             }
@@ -107,10 +103,9 @@ namespace RobbyVisualizer
             base.Draw(gameTime);
         }
 
-        private void readFile(String filePath) {
+        private void readFile(String filePath)
+        {
             // TODO read file
-   
-             
 
             // split file
             // String[] fileElements = fileContent.Split(",", StringSplitOptions.RemoveEmptyEntries);
@@ -118,6 +113,6 @@ namespace RobbyVisualizer
 
             // send the moves to an int[]
             // _moves = Array.ConvertAll(fileElements, s => int.Parse(s));
-        } 
+        }
     }
 }
