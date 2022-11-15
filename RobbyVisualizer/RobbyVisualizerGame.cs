@@ -103,16 +103,17 @@ namespace RobbyVisualizer
             base.Draw(gameTime);
         }
 
-        private void readFile(String filePath)
+        private int[] readFile(String filePath)
         {
-            // TODO read file
+            string contents = File.ReadAllText(filePath);
 
             // split file
-            // String[] fileElements = fileContent.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            String[] fileElements = contents.Split(",", StringSplitOptions.RemoveEmptyEntries);
             // TODO take out uneeded values not part of moves
 
-            // send the moves to an int[]
-            // _moves = Array.ConvertAll(fileElements, s => int.Parse(s));
+            // save the moves to an int[]
+            int[] moves = Array.ConvertAll(fileElements, s => int.Parse(s));
+            returns moves;
         }
     }
 }
