@@ -15,23 +15,24 @@ namespace RobbyVisualizer
         private IRobbyTheRobot _robot;
         private ContentsOfGrid[,] _grid;
         private int[] _moves;
+        private int _moveCount;
+        private int _currentScore;
 
         public RobbyVisualizerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here 
-
             base.Initialize();
             // fill robby with preset values, not important as they are not used
             _robot = Robby.createRobby(1, 2, 3, 4, 5, 6.0, 7.0);
-            _grid = _robot.GenerateRandomTestGrid();
+            Random _rng = new Random();
+            _moveCount = 0;
+            _currentScore = 0;
         }
 
         protected override void LoadContent()
@@ -76,9 +77,10 @@ namespace RobbyVisualizer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
-
-            RobbyHelper.ScoreForAllele();
-            // TODO: Add your update logic here
+            _grid = _robot.GenerateRandomTestGrid();
+            // call score for allele
+            RobbyHelper.ScoreForAllele(_moves, _grid, _rng, _rng.Next(0, 10), _rng.Next(0 , 10));
+            _moveCount++;
 
             base.Update(gameTime);
         }
