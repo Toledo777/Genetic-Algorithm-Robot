@@ -20,6 +20,7 @@ namespace RobbyVisualizer
         private int _maxMoves;
         private int _posX;
         private int _posY;
+        private int _currentGeneration;
 
         public RobbyVisualizerGame()
         {
