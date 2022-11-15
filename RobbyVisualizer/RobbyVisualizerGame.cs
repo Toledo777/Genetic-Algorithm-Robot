@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,6 +9,7 @@ namespace RobbyVisualizer
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private List<SimulationSprite> _tiles;
 
         public RobbyVisualizerGame()
         {
@@ -18,10 +20,15 @@ namespace RobbyVisualizer
 
         protected override void Initialize()
         {
+            _tiles = new List<SimulationSprite>();
             // TODO: Add your initialization logic here
             Tile t = new Tile(true, true);
-            SimulationSprite s = new SimulationSprite(this, t);
-            Components.Add(s);
+            for(int i = 0; i < 10; i++){
+                for(int z = 0; z < 10; z++){
+                    SimulationSprite s = new SimulationSprite(this, t, z * 10, (i * 10) + 20);
+                    Components.Add(s);
+                }
+            }
 
             base.Initialize();
         }
