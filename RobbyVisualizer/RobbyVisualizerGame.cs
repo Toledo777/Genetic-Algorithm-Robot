@@ -22,6 +22,7 @@ namespace RobbyVisualizer
         private int _posY;
         private int _currentGeneration;
         private Random _rng;
+        private String[] _solutionFiles;
 
         public RobbyVisualizerGame()
         {
@@ -48,28 +49,15 @@ namespace RobbyVisualizer
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var fileContent = string.Empty;
-            var folderPath = string.Empty;
 
             // open a file dialog box
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (var folderDialog = new FolderBrowserDialog())
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                // openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                // openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+            
+                if (folderDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
                 {
-                    //Get the path of specified file
-                    folderPath = openFileDialog.FileName;
-
-                    //Read the contents of the file into a stream
-                    var fileStream = openFileDialog.OpenFile();
-
-                    using (StreamReader reader = new StreamReader(fileStream))
-                    {
-                        fileContent = reader.ReadToEnd();
-                    }
+                    // Get paths of all files in folder (full path)
+                    _solutionFiles = Directory.GetFiles(folderDialog.SelectedPath);
                 }
             }
 
@@ -94,6 +82,7 @@ namespace RobbyVisualizer
 
             // first move of generation
             if (_moveCount == 0) {
+                // new grid
                 _grid = _robot.GenerateRandomTestGrid();
                 // call score for allele
                 _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
@@ -105,7 +94,7 @@ namespace RobbyVisualizer
                 _moveCount++;
             }
 
-
+            // add move delay as needed
             base.Update(gameTime);
         }
 
@@ -120,13 +109,15 @@ namespace RobbyVisualizer
 
         private void readFile(String filePath) {
             // TODO read file
+   
+             
 
             // split file
-            String[] fileElements = fileContent.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            // String[] fileElements = fileContent.Split(",", StringSplitOptions.RemoveEmptyEntries);
             // TODO take out uneeded values not part of moves
 
             // send the moves to an int[]
-            _moves = Array.ConvertAll(fileElements, s => int.Parse(s));
+            // _moves = Array.ConvertAll(fileElements, s => int.Parse(s));
         } 
     }
 }
