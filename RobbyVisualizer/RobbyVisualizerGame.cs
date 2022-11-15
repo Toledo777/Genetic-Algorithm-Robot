@@ -21,6 +21,7 @@ namespace RobbyVisualizer
         private int _posX;
         private int _posY;
         private int _currentGeneration;
+        private Random _rng;
 
         public RobbyVisualizerGame()
         {
@@ -47,7 +48,7 @@ namespace RobbyVisualizer
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var fileContent = string.Empty;
-            var filePath = string.Empty;
+            var folderPath = string.Empty;
 
             // open a file dialog box
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -60,7 +61,7 @@ namespace RobbyVisualizer
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     //Get the path of specified file
-                    filePath = openFileDialog.FileName;
+                    folderPath = openFileDialog.FileName;
 
                     //Read the contents of the file into a stream
                     var fileStream = openFileDialog.OpenFile();
