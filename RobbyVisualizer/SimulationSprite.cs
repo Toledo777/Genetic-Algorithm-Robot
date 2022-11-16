@@ -10,21 +10,25 @@ namespace RobbyVisualizer
         private RobbyVisualizerGame _game;
         private SpriteBatch _spriteBatch;
         private ContentsOfGrid _grid;
-
-        // private Tile _tile;
         private Texture2D _tileTexture;
         private int _x;
         private int _y;
-        public SimulationSprite(RobbyVisualizerGame game, ContentsOfGrid grid, int x, int y) : base(game)
+        // private bool _isRobby;
+        public SimulationSprite(RobbyVisualizerGame game, ContentsOfGrid grid, int x, int y, bool isRobby) : base(game)
         {
             this._game = game;
             this._grid = grid;
             this._x = x;
             this._y = y;
+            this.IsRobby = isRobby;
         }
         public ContentsOfGrid Grid{
             get{return this._grid;}
             set{this._grid = value;}
+        }
+        public bool IsRobby{
+            get;
+            set;
         }
      
 
@@ -37,23 +41,28 @@ namespace RobbyVisualizer
         protected override void LoadContent()
         {  
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            if(_grid.Equals(ContentsOfGrid.Can)){
-                _tileTexture = _game.Content.Load<Texture2D>("can");
-            }
-            else{
-                _tileTexture = _game.Content.Load<Texture2D>("empty");
-            }
+           SetTileTexture();
             base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            if(_grid.Equals(ContentsOfGrid.Can)){
+            SetTileTexture();
+            base.Update(gameTime);
+        }
+         /// <summary>
+        /// Sets _tileTexture depending on tile content.
+        /// </summary>
+        void SetTileTexture(){
+            if(IsRobby){
+                _tileTexture = _game.Content.Load<Texture2D>("robby");
+            }
+            else if(_grid.Equals(ContentsOfGrid.Can)){
                 _tileTexture = _game.Content.Load<Texture2D>("can");
             }
             else{
                 _tileTexture = _game.Content.Load<Texture2D>("empty");
-            }            base.Update(gameTime);
+            }
         }
 
         public override void Draw(GameTime gameTime)

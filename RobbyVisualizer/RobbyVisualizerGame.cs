@@ -40,7 +40,11 @@ namespace RobbyVisualizer
             _tiles = new List<SimulationSprite>();
             for(int i = 0; i < _grid.GetLength(0); i++){
                 for(int j = 0; j < _grid.GetLength(1); j++){
-                    SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40);
+                    bool isRobby = false;
+                    if(i == 3 && j == 5){
+                        isRobby = true;
+                    }
+                    SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40,isRobby );
                     Components.Add(s);
                     _tiles.Add(s);
 
