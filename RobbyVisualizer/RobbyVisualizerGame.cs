@@ -12,6 +12,7 @@ namespace RobbyVisualizer
         private ContentsOfGrid[,] _grid;
         private SpriteBatch _spriteBatch;
         private List<SimulationSprite> _tiles;
+        private bool _isRobby;
         public RobbyVisualizerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -64,6 +65,12 @@ namespace RobbyVisualizer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+                if(_tiles[0].Grid == ContentsOfGrid.Empty){
+                    _tiles[0].Grid = ContentsOfGrid.Can;
+                }
+                else{
+                    _tiles[0].Grid = ContentsOfGrid.Empty;
+                }
             
 
             // TODO: Add your update logic here

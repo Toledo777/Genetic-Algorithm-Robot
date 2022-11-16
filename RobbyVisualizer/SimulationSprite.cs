@@ -22,6 +22,10 @@ namespace RobbyVisualizer
             this._x = x;
             this._y = y;
         }
+        public ContentsOfGrid Grid{
+            get{return this._grid;}
+            set{this._grid = value;}
+        }
      
 
         public override void Initialize()
