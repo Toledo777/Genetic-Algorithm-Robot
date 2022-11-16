@@ -23,6 +23,7 @@ namespace RobbyVisualizer
         private int _currentGeneration;
         private Random _rng;
         private String[] _solutionFiles;
+        private int _generationIndex;
 
         public RobbyVisualizerGame()
         {
@@ -35,12 +36,14 @@ namespace RobbyVisualizer
         {
             base.Initialize();
             // fill robby with preset values, not important as they are not used
-            _robot = Robby.createRobby(1, 2, 3, 4, 5, 6.0, 7.0);
+            _robot = Robby.createRobby(1000, 243, 200, 7, 7, 6.0, 7.0);
             Random _rng = new Random();
             _moveCount = 0;
             _currentScore = 0;
             _posX = _rng.Next(10);
             _posY = _rng.Next(10);
+            // count of how many generations have been displayed
+            _generationIndex = 0;
         }
 
         protected override void LoadContent()
@@ -65,12 +68,23 @@ namespace RobbyVisualizer
             // reset moves if max is reached
             if (_moveCount == _maxMoves)
             {
-                // reset coords to rand position from 0 to 10
-                _posX = _rng.Next(10);
-                _posY = _rng.Next(10);
-                _moveCount = 0;
-                _currentScore = 0;
-                // TODO, read next file
+                // -1 since generationIndex starts at 0
+                if (_generationIndex < _solutionFiles.Length -1) {
+                    // reset coords to rand position from 0 to 10
+                    _posX = _rng.Next(10);
+                    _posY = _rng.Next(10);
+                    _moveCount = 0;
+                    _currentScore = 0;
+                    _generationIndex++;
+
+                    // read next file
+                    this.readFile(_solutionFiles[_generationIndex]);
+                }
+                else {
+                    // exit when no more files left, may change later
+                    Exit();
+                }
+        
             }
 
             // first move of generation
