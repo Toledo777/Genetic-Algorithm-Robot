@@ -78,7 +78,7 @@ namespace RobbyVisualizer
                     _generationIndex++;
 
                     // read next file
-                    this.readFile(_solutionFiles[_generationIndex]);
+                    _moves = this.readFile(_solutionFiles[_generationIndex]);
                 }
                 else {
                     // exit when no more files left, may change later
