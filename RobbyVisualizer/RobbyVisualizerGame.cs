@@ -39,7 +39,6 @@ namespace RobbyVisualizer
             Random _rng = new Random();
             _moveCount = 0;
             _currentScore = 0;
-            _maxMoves = _robot.NumberOfActions;
             _posX = _rng.Next(10);
             _posY = _rng.Next(10);
         }
@@ -109,11 +108,18 @@ namespace RobbyVisualizer
 
             // split file
             String[] fileElements = contents.Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+            // set last element from file to generation
+            _currentGeneration = int.Parse(fileElements[fileElements.Length -1]);
+            // set max moves, before last element in file
+            _maxMoves = int.Parse(fileElements[fileElements.Length -2]);
             // TODO take out uneeded values not part of moves
 
             // save the moves to an int[]
             int[] moves = Array.ConvertAll(fileElements, s => int.Parse(s));
-            returns moves;
+            // resize array, remove last two non-move elements
+            Array.Resize(ref moves, moves.Length -2);
+            return moves;
         }
     }
 }
