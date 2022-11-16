@@ -92,6 +92,9 @@ namespace RobbyVisualizer
             {
                 // new grid
                 _grid = _robot.GenerateRandomTestGrid();
+
+                // read solution file
+                _moves = this.readFile(_solutionFiles[_generationIndex]);
                 // call score for allele
                 _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
                 _moveCount++;
