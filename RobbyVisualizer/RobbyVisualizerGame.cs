@@ -134,10 +134,11 @@ namespace RobbyVisualizer
             _maxMoves = int.Parse(fileElements[2]);
             // TODO take out uneeded values not part of moves
 
+            // resize array, set array to be from index 3 to end inclusive
+            fileElements = fileElements[3..fileElements.Length];
             // save the moves to an int[]
             int[] moves = Array.ConvertAll(fileElements, s => int.Parse(s));
-            // resize array, set moves to be from index 3 to end inclusive
-            moves = moves[3..moves.Length];
+
             return moves;
         }
     }
