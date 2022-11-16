@@ -37,7 +37,7 @@ namespace RobbyVisualizer
             base.Initialize();
             // fill robby with preset values, not important as they are not used
             _robot = Robby.createRobby(1000, 243, 200, 7, 7, 6.0, 7.0);
-            Random _rng = new Random();
+            _rng = new Random();
             _moveCount = 0;
             _currentScore = 0;
             _posX = _rng.Next(10);
