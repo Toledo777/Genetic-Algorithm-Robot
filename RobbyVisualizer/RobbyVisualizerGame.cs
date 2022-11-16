@@ -65,6 +65,11 @@ namespace RobbyVisualizer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
+
+            // read file on first gen before first move
+            if (_generationIndex == 0 && _moveCount == 0) {
+                _moves = this.readFile(_solutionFiles[_generationIndex]);
+            }
             // reset moves if max is reached
             if (_moveCount == _maxMoves)
             {
@@ -77,7 +82,7 @@ namespace RobbyVisualizer
                     _currentScore = 0;
                     _generationIndex++;
 
-                    // read next file
+                    // read next file for next gen
                     _moves = this.readFile(_solutionFiles[_generationIndex]);
                 }
                 else {
@@ -87,14 +92,14 @@ namespace RobbyVisualizer
         
             }
 
-            // first move of generation
+            // first move of each generation
             if (_moveCount == 0)
             {
                 // new grid
                 _grid = _robot.GenerateRandomTestGrid();
 
                 // read solution file
-                _moves = this.readFile(_solutionFiles[_generationIndex]);
+                
                 // call score for allele
                 _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
                 _moveCount++;
