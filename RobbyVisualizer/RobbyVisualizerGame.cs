@@ -127,15 +127,17 @@ namespace RobbyVisualizer
             String[] fileElements = contents.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
             // set last element from file to generation
-            _currentGeneration = int.Parse(fileElements[fileElements.Length -1]);
+            _currentGeneration = int.Parse(fileElements[0]);
+            // index 1 is fitness, not needed
+
             // set max moves, before last element in file
-            _maxMoves = int.Parse(fileElements[fileElements.Length -2]);
+            _maxMoves = int.Parse(fileElements[2]);
             // TODO take out uneeded values not part of moves
 
             // save the moves to an int[]
             int[] moves = Array.ConvertAll(fileElements, s => int.Parse(s));
-            // resize array, remove last two non-move elements
-            Array.Resize(ref moves, moves.Length -2);
+            // resize array, set moves to be from index 3 to end inclusive
+            moves = moves[3..moves.Length];
             return moves;
         }
     }
