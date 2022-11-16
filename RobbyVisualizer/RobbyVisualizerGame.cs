@@ -5,12 +5,14 @@ using System;
 using System.IO;
 using RobbyTheRobot;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace RobbyVisualizer
 {
     public class RobbyVisualizerGame : Game
     {
         private GraphicsDeviceManager _graphics;
+        private List<SimulationSprite> _tiles;
         private SpriteBatch _spriteBatch;
         private IRobbyTheRobot _robot;
         private ContentsOfGrid[,] _grid;
@@ -49,6 +51,8 @@ namespace RobbyVisualizer
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _tiles = new List<SimulationSprite>();
+
 
             // open a file dialog box
             using (var folderDialog = new FolderBrowserDialog())
@@ -97,6 +101,19 @@ namespace RobbyVisualizer
             {
                 // new grid
                 _grid = _robot.GenerateRandomTestGrid();
+                // populate grid
+                for(int i = 0; i < _grid.GetLength(0); i++){
+                    for(int j = 0; j < _grid.GetLength(1); j++){
+                        bool isRobby = false;
+                        if(i == 3 && j == 5){
+                            isRobby = true;
+                        }
+                        SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40,isRobby );
+                        Components.Add(s);
+                        _tiles.Add(s);
+
+                }
+            }
 
                 // read solution file
                 
