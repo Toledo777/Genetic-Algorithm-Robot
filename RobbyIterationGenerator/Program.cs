@@ -22,15 +22,8 @@ namespace RobbyIterationGenerator
             {
                 Directory.CreateDirectory(path);
             }
-            Console.WriteLine($"\t \t Your generated text files will be saved in : \n {path}");
+            Console.WriteLine($"Your generated text files will be saved in : \n\t\t {path}");
 
-
-            // Create File path to write in
-            var file_name = "RobbyIteration.txt";
-            var file_path = System.IO.Path.Combine(path, file_name);
-            // Create file
-            using (File.Create(file_path))
-            Console.WriteLine("\nThe infromation will be written in the file: " + file_path + "\n");
 
 
             // Input parameters for the generations
@@ -130,7 +123,7 @@ namespace RobbyIterationGenerator
             // Run Roby through grids
             for (int i = 0; i < robbyRobot.NumberOfGenerations; i++)
             {
-                robbyRobot.GeneratePossibleSolutions(file_path);
+                robbyRobot.GeneratePossibleSolutions(path);
             }
 
             // Stop and Print time
