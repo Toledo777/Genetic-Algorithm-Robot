@@ -2,15 +2,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RobbyTheRobot;
 
 namespace RobbyVisualizer
 {
     public class RobbyVisualizerGame : Game
     {
         private GraphicsDeviceManager _graphics;
+        private ContentsOfGrid[,] _grid;
         private SpriteBatch _spriteBatch;
         private List<SimulationSprite> _tiles;
-
         public RobbyVisualizerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -20,15 +21,34 @@ namespace RobbyVisualizer
 
         protected override void Initialize()
         {
-            _tiles = new List<SimulationSprite>();
+            
             // TODO: Add your initialization logic here
-            Tile t = new Tile(true, true);
-            for(int i = 0; i < 10; i++){
-                for(int z = 0; z < 10; z++){
-                    SimulationSprite s = new SimulationSprite(this, t, z * 10, (i * 10) + 20);
+            // for(int i = 0; i < 2; i++){
+            //     for(int z = 0; z < 2; z++){
+            //         SimulationSprite s = new SimulationSprite(this, true, true, z * 10, (i * 10) + 20);
+            //         Components.Add(s);
+            //     }
+            // }
+            IRobbyTheRobot robby = Robby.createRobby(10,10,10,10,10,10,10,null);
+            _grid = robby.GenerateRandomTestGrid();
+            // int counter = 0;
+            // foreach(ContentsOfGrid c in grid){
+            //     Components.Add(new SimulationSprite(this, c, counter,100));
+            //     counter+=40;
+            // }
+            _tiles = new List<SimulationSprite>();
+            for(int i = 0; i < _grid.GetLength(0); i++){
+                for(int j = 0; j < _grid.GetLength(1); j++){
+                    SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40);
                     Components.Add(s);
+                    _tiles.Add(s);
+
                 }
             }
+            // _graph = new SimulationSprite(this, grid);
+            // Components.Add(new SimulationSprite(this,ContentsOfGrid.Wall, 100, 100));
+            // Components.Add(new SimulationSprite(this,ContentsOfGrid.Can, 200, 200));
+            // Components.Add(new SimulationSprite(this,ContentsOfGrid.Can));
 
             base.Initialize();
         }
@@ -44,6 +64,7 @@ namespace RobbyVisualizer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            
 
             // TODO: Add your update logic here
 
