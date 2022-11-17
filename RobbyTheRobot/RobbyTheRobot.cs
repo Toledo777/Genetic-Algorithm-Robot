@@ -29,12 +29,14 @@ namespace RobbyTheRobot
 
         private event FitnessEventHandler _fitnessCalculation;
 
+        private int _fileCount = 0;
+
 
         public RobbyTheRobot(int numberOfGenerations, int populationSize, int numberOfGenes, int lengthOfGene, int numberOfTrials, double mutationRate, double eliteRate,
          int? seed = null, int numberOfActions = 200, int numberOfTestGrids = 10, int gridSize = 10)
         {
             this._fitnessCalculation += ComputeFitness;
-            this.FileWrittenEvent += (string file_path) => { Console.WriteLine($"Generation {this._geneticAlgorithm.GenerationCount}s' top chromosomes' fitness,number of moves, and genes was written to the file - {file_path}"); };
+            this.FileWrittenEvent += (string file_path, long generation) => { Console.WriteLine($"Generation {generation}s' top chromosomes' fitness,number of moves, and genes was written to the file - {file_path}"); };
             this.NumberOfGenerations = numberOfGenerations;
             this.NumberOfTestGrids = numberOfTrials;
             this.seed = seed;
@@ -88,15 +90,17 @@ namespace RobbyTheRobot
             {
                 // Create file
                 long genCountIndexOne = this._geneticAlgorithm.GenerationCount;
-                // Incrment by one to get the Generation Count based on 1 index
+                // Incerment by one to get the Generation Count based on 1 index
                 if (this._geneticAlgorithm.GenerationCount != 1) { genCountIndexOne = this._geneticAlgorithm.GenerationCount + 1; }
-                var file_name = $"Generation{genCountIndexOne}.txt";
+                // Create file
+                var file_name = $"Generation{++this._fileCount}.txt";
                 var file_path = System.IO.Path.Combine(folderPath, file_name);
                 // Create string from top chromosome
                 string line = $"{genCountIndexOne},{this._geneticAlgorithm.CurrentGeneration[0].Fitness},{this.NumberOfActions},{this._geneticAlgorithm.CurrentGeneration[0].ToString()}";
                 // Append to file
                 File.WriteAllLinesAsync(file_path, new List<string> { line });
-                this.FileWrittenEvent(file_path);
+                // Notify user
+                this.FileWrittenEvent(file_path, genCountIndexOne);
             }
         }
 
