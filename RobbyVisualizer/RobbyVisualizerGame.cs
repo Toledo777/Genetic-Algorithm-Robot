@@ -57,7 +57,6 @@ namespace RobbyVisualizer
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
             // open a file dialog box
             using (var folderDialog = new FolderBrowserDialog())
             {
@@ -73,6 +72,7 @@ namespace RobbyVisualizer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
+            // Delay for Robby to slow down
             if (gameTime.TotalGameTime.TotalMilliseconds >= _timer)
             {
                 // read file on first gen before first move
@@ -97,7 +97,7 @@ namespace RobbyVisualizer
                     MoveRobby(ref points);
                 }
 
-                _timer += 100;
+                _timer += 700;
             }
             base.Update(gameTime);
 
@@ -120,6 +120,7 @@ namespace RobbyVisualizer
         {
             return (y * gridSize) + x;
         }
+
         private void Reset()
         {
             // -1 since generationIndex starts at 0
@@ -135,29 +136,38 @@ namespace RobbyVisualizer
                 // read next file for next gen
                 _moves = this.readFile(_solutionFiles[_generationIndex]);
             }
-
             else
             {
-                // exit when no more files left, may change later
-                Exit();
+                // _generationIndex = 0;
+                // _moveCount = 0;
+                // _currentScore = 0;
             }
         }
         private void MoveRobby(ref double points)
         {
+            // Update Robyy Position
             _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = false;
 
-            points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+            /**
+                In Here you need to switch the x and y to match the teachers ScireFirAllele .
+            */
+            points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posY, ref _posX);
             _currentScore += points;
             _moveCount++;
 
             if (points == 10)
             {
+
                 _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Grid = ContentsOfGrid.Empty;
+                _grid[_posX, _posY] = ContentsOfGrid.Empty;
             }
+
             _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
         }
+
         private void InitializeGrid(ref double points)
         {
+            Components.Clear();
             _tiles = new List<SimulationSprite>();
             // new grid
             _grid = _robot.GenerateRandomTestGrid();
@@ -172,10 +182,21 @@ namespace RobbyVisualizer
                 }
             }
 
-            // read solution file
+            // Set Previous RObby Position
+            int prevX = _posX, prevY = _posY;
+            // Set Initial Robby Position
+            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
 
             // call score for allele
-            points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+            /**
+                In Here you need to switch the x and y to match the teachers ScireFirAllele .
+            */
+            points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posY, ref _posX);
+
+            // Update Robby Position
+            _tiles[ConvertCoordsToInt(prevX, prevY, 10)].IsRobby = false;
+            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
+
             _currentScore += points;
             _moveCount++;
         }
