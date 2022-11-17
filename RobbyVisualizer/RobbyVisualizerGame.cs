@@ -69,7 +69,6 @@ namespace RobbyVisualizer
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
             if(gameTime.TotalGameTime.TotalMilliseconds >= _timer){
-                Console.WriteLine(gameTime.TotalGameTime.Milliseconds);
             // read file on first gen before first move
             if (_generationIndex == 0 && _moveCount == 0) {
                 _moves = this.readFile(_solutionFiles[_generationIndex]);
@@ -77,63 +76,18 @@ namespace RobbyVisualizer
             // reset moves if max is reached
             if (_moveCount == _maxMoves)
             {
-                // -1 since generationIndex starts at 0
-                if (_generationIndex < _solutionFiles.Length -1) {
-                    // reset coords to rand position from 0 to 10
-                    _posX = _rng.Next(10);
-                    _posY = _rng.Next(10);
-                    _moveCount = 0;
-                    _currentScore = 0;
-                    _generationIndex++;
-
-                    // read next file for next gen
-                    _moves = this.readFile(_solutionFiles[_generationIndex]);
-                }
-                else {
-                    // exit when no more files left, may change later
-                    Exit();
-                }
-        
+                Reset();
             }
 
             // first move of each generation
             double points = 0;
             if (_moveCount == 0)
             {
-                _tiles = new List<SimulationSprite>();
-
-                // new grid
-                _grid = _robot.GenerateRandomTestGrid();
-
-                // populate sprite grid
-                for(int i = 0; i < _grid.GetLength(0); i++){
-                    for(int j = 0; j < _grid.GetLength(1); j++){
-                        SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40, false);
-                        Components.Add(s);
-                        _tiles.Add(s);
-                }
-            }
-
-                // read solution file
-                
-                // call score for allele
-                points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
-                _currentScore += points;
-                _moveCount++;
+                InitializeGrid(ref points);
             }
             else if (_moveCount > 0)
             {
-            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = false;
-
-                points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
-                _currentScore += points;
-                _moveCount++;
-            
-            if(points == 10){
-                _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Grid = ContentsOfGrid.Empty;
-            }
-            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
-            // add move delay as needed
+                MoveRobby(ref points);
             }            
 
                 _timer += 100;
@@ -153,6 +107,57 @@ namespace RobbyVisualizer
 
         private int ConvertCoordsToInt(int x, int y, int gridSize){
             return (y * gridSize) + x;
+        }
+        private void Reset(){
+                            // -1 since generationIndex starts at 0
+                if (_generationIndex < _solutionFiles.Length -1) {
+                    // reset coords to rand position from 0 to 10
+                    _posX = _rng.Next(10);
+                    _posY = _rng.Next(10);
+                    _moveCount = 0;
+                    _currentScore = 0;
+                    _generationIndex++;
+
+                    // read next file for next gen
+                    _moves = this.readFile(_solutionFiles[_generationIndex]);
+                }
+                
+                else {
+                    // exit when no more files left, may change later
+                    Exit();
+        }
+        }
+    private void MoveRobby(ref double points){
+                    _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = false;
+
+                points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+                _currentScore += points;
+                _moveCount++;
+            
+            if(points == 10){
+                _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Grid = ContentsOfGrid.Empty;
+            }
+            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
+    }
+        private void InitializeGrid(ref double points){
+                            _tiles = new List<SimulationSprite>();
+                // new grid
+                _grid = _robot.GenerateRandomTestGrid();
+                // populate sprite grid
+                for(int i = 0; i < _grid.GetLength(0); i++){
+                    for(int j = 0; j < _grid.GetLength(1); j++){
+                        SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40, false);
+                        Components.Add(s);
+                        _tiles.Add(s);
+                }
+            }
+
+                // read solution file
+                
+                // call score for allele
+                points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+                _currentScore += points;
+                _moveCount++;
         }
         private int[] readFile(String filePath)
         {
