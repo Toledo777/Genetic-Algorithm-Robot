@@ -6,7 +6,6 @@ namespace RobbyTheRobotTests
     [TestClass]
     public class RobbyTheRobotTest
     {
-        const string file_name = "Test.txt";
         const int NUMBER_OF_ACTIONS = 200;
 
         [TestMethod]
