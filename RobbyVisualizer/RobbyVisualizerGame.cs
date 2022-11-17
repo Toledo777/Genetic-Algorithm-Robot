@@ -26,7 +26,7 @@ namespace RobbyVisualizer
         private Random _rng;
         private String[] _solutionFiles;
         private int _generationIndex;
-
+        private double _timer = 0;
         public RobbyVisualizerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -51,7 +51,6 @@ namespace RobbyVisualizer
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _tiles = new List<SimulationSprite>();
 
 
             // open a file dialog box
@@ -69,7 +68,8 @@ namespace RobbyVisualizer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
-
+            if(gameTime.TotalGameTime.TotalMilliseconds >= _timer){
+                Console.WriteLine(gameTime.TotalGameTime.Milliseconds);
             // read file on first gen before first move
             if (_generationIndex == 0 && _moveCount == 0) {
                 _moves = this.readFile(_solutionFiles[_generationIndex]);
@@ -100,18 +100,17 @@ namespace RobbyVisualizer
             double points = 0;
             if (_moveCount == 0)
             {
+                _tiles = new List<SimulationSprite>();
+
                 // new grid
                 _grid = _robot.GenerateRandomTestGrid();
-                // populate grid
+
+                // populate sprite grid
                 for(int i = 0; i < _grid.GetLength(0); i++){
                     for(int j = 0; j < _grid.GetLength(1); j++){
-
-                        if(i == 3 && j == 5){
-                        }
                         SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40, false);
                         Components.Add(s);
                         _tiles.Add(s);
-
                 }
             }
 
@@ -129,14 +128,18 @@ namespace RobbyVisualizer
                 points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
                 _currentScore += points;
                 _moveCount++;
-            }
+            
             if(points == 10){
                 _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Grid = ContentsOfGrid.Empty;
-
             }
             _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
             // add move delay as needed
+            }            
+
+                _timer += 100;
+            }
             base.Update(gameTime);
+
         }
 
         protected override void Draw(GameTime gameTime)
