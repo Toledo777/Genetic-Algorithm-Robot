@@ -61,7 +61,7 @@ namespace RobbyTheRobot
         /// <param name="chromosome">The chromosome to compute the fitness of.</param>
         /// <param name="generation">The generation the chromosome is in. - this is only to acces parameters if need be </param>
         /// <returns>The fitness of the chromosome.</returns>
-        public double ComputeFitness(IChromosome chromosome, IGeneration generation)
+        private double ComputeFitness(IChromosome chromosome, IGeneration generation)
         {
             double score = 0;
             int x = _random.Next(0, GridSize);
