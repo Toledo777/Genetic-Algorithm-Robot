@@ -141,7 +141,6 @@ namespace RobbyTheRobot
             coords[0] = pos / gridSize;
             // Calcuates length (x position)
             coords[1] = pos % gridSize;
-
             return coords;
         }
 

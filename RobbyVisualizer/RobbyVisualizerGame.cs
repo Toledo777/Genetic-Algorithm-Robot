@@ -97,6 +97,7 @@ namespace RobbyVisualizer
             }
 
             // first move of each generation
+            double points = 0;
             if (_moveCount == 0)
             {
                 // new grid
@@ -104,11 +105,10 @@ namespace RobbyVisualizer
                 // populate grid
                 for(int i = 0; i < _grid.GetLength(0); i++){
                     for(int j = 0; j < _grid.GetLength(1); j++){
-                        bool isRobby = false;
+
                         if(i == 3 && j == 5){
-                            isRobby = true;
                         }
-                        SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40,isRobby );
+                        SimulationSprite s = new SimulationSprite(this, _grid[i,j], j * 40, i *40, false);
                         Components.Add(s);
                         _tiles.Add(s);
 
@@ -118,16 +118,23 @@ namespace RobbyVisualizer
                 // read solution file
                 
                 // call score for allele
-                _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+                points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+                _currentScore += points;
                 _moveCount++;
             }
-
             else if (_moveCount > 0)
             {
-                _currentScore += RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = false;
+
+                points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posX, ref _posY);
+                _currentScore += points;
                 _moveCount++;
             }
+            if(points == 10){
+                _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Grid = ContentsOfGrid.Empty;
 
+            }
+            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
             // add move delay as needed
             base.Update(gameTime);
         }
@@ -141,6 +148,9 @@ namespace RobbyVisualizer
             base.Draw(gameTime);
         }
 
+        private int ConvertCoordsToInt(int x, int y, int gridSize){
+            return (y * gridSize) + x;
+        }
         private int[] readFile(String filePath)
         {
             string contents = File.ReadAllText(filePath);
