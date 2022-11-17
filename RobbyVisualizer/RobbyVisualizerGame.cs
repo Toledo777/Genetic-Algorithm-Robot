@@ -97,7 +97,7 @@ namespace RobbyVisualizer
                     MoveRobby(ref points);
                 }
 
-                _timer += 700;
+                _timer += 100;
             }
             base.Update(gameTime);
 
@@ -111,8 +111,6 @@ namespace RobbyVisualizer
             _spriteBatch.DrawString(_font, "Score: " + _currentScore, new Vector2(500, 40), Color.White);
             _spriteBatch.DrawString(_font, $"Moves: {_moveCount}/{_maxMoves}", new Vector2(500, 80), Color.White);
             _spriteBatch.End();
-            // TODO: Add your drawing code here
-
             base.Draw(gameTime);
         }
 
@@ -158,7 +156,7 @@ namespace RobbyVisualizer
             if (points == 10)
             {
 
-                _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Grid = ContentsOfGrid.Empty;
+                _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Square = ContentsOfGrid.Empty;
                 _grid[_posX, _posY] = ContentsOfGrid.Empty;
             }
 

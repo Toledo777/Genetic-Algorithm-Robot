@@ -9,22 +9,22 @@ namespace RobbyVisualizer
     {
         private RobbyVisualizerGame _game;
         private SpriteBatch _spriteBatch;
-        private ContentsOfGrid _grid;
+        private ContentsOfGrid _square;
         private Texture2D _tileTexture;
         private int _x;
         private int _y;
         // private bool _isRobby;
-        public SimulationSprite(RobbyVisualizerGame game, ContentsOfGrid grid, int x, int y, bool isRobby) : base(game)
+        public SimulationSprite(RobbyVisualizerGame game, ContentsOfGrid square, int x, int y, bool isRobby) : base(game)
         {
             this._game = game;
-            this._grid = grid;
+            this._square = square;
             this._x = x;
             this._y = y;
             this.IsRobby = isRobby;
         }
-        public ContentsOfGrid Grid{
-            get{return this._grid;}
-            set{this._grid = value;}
+        public ContentsOfGrid Square{
+            get{return this._square;}
+            set{this._square = value;}
         }
         public bool IsRobby{
             get;
@@ -57,7 +57,7 @@ namespace RobbyVisualizer
             if(IsRobby){
                 _tileTexture = _game.Content.Load<Texture2D>("robby");
             }
-            else if(_grid.Equals(ContentsOfGrid.Can)){
+            else if(this._square.Equals(ContentsOfGrid.Can)){
                 _tileTexture = _game.Content.Load<Texture2D>("can");
             }
             else{
