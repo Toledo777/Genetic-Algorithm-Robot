@@ -141,21 +141,21 @@ namespace GeneticAlgorithmTests
             Assert.AreEqual(expected, actualSum);
         }
 
-        // not sure if this test is needed, if GeneticAlgorithm prevents this error then the exception will never be called
+        // test exception throwing of evaluate population fitness
 
-        // [TestMethod]
-        // [ExpectedException(typeof(InvalidOperationException))]
-        // [DataRowAttribute(200, 243, 7, 40, 30, 0, 1111111, false)]
-        // [DataRowAttribute(200, 243, 7, 40, 30, 0, 63497, true)]
-        // public void TestEvaluatePopFitnessException(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, int seed, bool regenerate)
-        // {
-        //     GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        [DataRowAttribute(200, 243, 7, 40, 30, 0, 1111111, false)]
+        [DataRowAttribute(200, 243, 7, 40, 30, 0, 63497, true)]
+        public void TestEvaluatePopFitnessException(int populationSize, int numberOfGenes, int lengthOfGene, double mutationRate, double eliteRate, int numberOfTrials, int seed, bool regenerate)
+        {
+            GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, handler, seed);
 
-        //     IGeneration gen = geneticAlgorithm.GenerateGeneration();
-        //     if (regenerate)
-        //         gen = geneticAlgorithm.GenerateGeneration();
+            IGeneration gen = geneticAlgorithm.GenerateGeneration();
+            if (regenerate)
+                gen = geneticAlgorithm.GenerateGeneration();
 
-        //     (gen as Generation).EvaluateFitnessOfPopulation();
-        // }
+            (gen as Generation).EvaluateFitnessOfPopulation();
+        }
     }
 }
