@@ -61,58 +61,7 @@ namespace RobbyTheRobotTests
                     }
                 }
             }
-
-
             Assert.AreEqual((gridSize * gridSize) - ((gridSize * gridSize) / 2), emptySpace);
-        }
-
-        [TestMethod]
-        [DataRow(10, 200, 243, 7, 10, 0.05, 0.1, 3241, 10)]
-        public void Test_Generate_Possible_Solutions_Written_to_file(int numberOfGenerations, int populationSize,
-                        int numberOfGenes, int lengthOfGene, int numberOfTrials,
-                        double mutationRate, double eliteRate, int? seed = null, int gridSize = 10)
-        {
-
-            var robby = new RobbyTheRobot.RobbyTheRobot(numberOfGenerations, populationSize, numberOfGenes, lengthOfGene, numberOfTrials, mutationRate, eliteRate, seed, gridSize: gridSize);
-
-            robby.GeneratePossibleSolutions(file_name);
-
-            // Check that file was created
-            Assert.IsTrue(System.IO.File.Exists(file_name));
-            System.IO.File.Delete(file_name);
-            // Check that file was deleted
-            Assert.IsFalse(System.IO.File.Exists(file_name));
-        }
-
-        [TestMethod]
-        [DataRow(10, 200, 243, 7, 10, 0.05, 0.1, 3241, 10)]
-        public void Test_Generate_Possible_Solutions_Written_to_file_Corecct_Data(int numberOfGenerations, int populationSize,
-                                                            int numberOfGenes, int lengthOfGene, int numberOfTrials,
-                                                            double mutationRate, double eliteRate, int? seed = null, int gridSize = 10)
-        {
-
-            var robby = new RobbyTheRobot.RobbyTheRobot(numberOfGenerations, populationSize, numberOfGenes, lengthOfGene, numberOfTrials, mutationRate, eliteRate, seed, gridSize: gridSize);
-
-            robby.GeneratePossibleSolutions(file_name);
-
-            // Check file Values
-            if (System.IO.File.Exists(file_name))
-            {
-                var lines = System.IO.File.ReadAllLines(file_name);
-                foreach (var line in lines)
-                {
-                    var values = line.Split(',');
-                    Assert.AreEqual(245, values.Length);
-                    Assert.AreEqual(NUMBER_OF_ACTIONS, values[1].Length);
-                }
-                System.IO.File.Delete(file_name);
-
-            }
-            else
-            {
-                Assert.Fail("File not created");
-            }
-
         }
     }
 }
