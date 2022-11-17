@@ -42,7 +42,7 @@ namespace RobbyTheRobot
             this.seed = seed;
             this.NumberOfActions = numberOfActions;
             this.NumberOfTestGrids = numberOfTestGrids;
-            this.GridSize = gridSize;
+            this.GridSize = 10;//gridSize;
             this.MutationRate = mutationRate;
             this.EliteRate = eliteRate;
             this._geneticAlgorithm = GeneticLib.CreateGeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, _fitnessCalculation, seed);
@@ -112,7 +112,7 @@ namespace RobbyTheRobot
             List<int> randomNumbers = new List<int>();
             // generates random unique ints until we have enough to fill half of the grid
 
-            while (randomNumbers.Count <= grid.Length / 2)
+            while (randomNumbers.Count < grid.Length / 2)
             {
                 int randomNumber = _random.Next(0, grid.Length);
                 if (!randomNumbers.Contains(randomNumber))
