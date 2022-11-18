@@ -61,7 +61,7 @@ namespace RobbyTheRobot
         /// <param name="chromosome">The chromosome to compute the fitness of.</param>
         /// <param name="generation">The generation the chromosome is in. - this is only to acces parameters if need be </param>
         /// <returns>The fitness of the chromosome.</returns>
-        public double ComputeFitness(IChromosome chromosome, IGeneration generation)
+        private double ComputeFitness(IChromosome chromosome, IGeneration generation)
         {
             double score = 0;
             int x = _random.Next(0, GridSize);
@@ -108,7 +108,7 @@ namespace RobbyTheRobot
             List<int> randomNumbers = new List<int>();
             // generates random unique ints until we have enough to fill half of the grid
 
-            while (randomNumbers.Count <= grid.Length / 2)
+            while (randomNumbers.Count < grid.Length / 2)
             {
                 int randomNumber = _random.Next(0, grid.Length);
                 if (!randomNumbers.Contains(randomNumber))
