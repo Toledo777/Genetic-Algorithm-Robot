@@ -29,6 +29,8 @@ namespace RobbyVisualizer
         private double _timer = 0;
         private SpriteFont _font;
         readonly int delay = 100; //delay between each game tick.
+        readonly int gridSize = 10;
+        private int _maxScore;
 
         private Boolean _restartGame;
 
@@ -47,9 +49,10 @@ namespace RobbyVisualizer
             _rng = new Random();
             _moveCount = 0;
             _currentScore = 0;
-            _posX = _rng.Next(10);
-            _posY = _rng.Next(10);
+            _posX = _rng.Next(gridSize);
+            _posY = _rng.Next(gridSize);
             _restartGame = false;
+            _maxScore = (gridSize * gridSize) / 2;
             // count of how many generations have been displayed
             _generationIndex = 0;
             // Font
@@ -115,13 +118,13 @@ namespace RobbyVisualizer
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_font, "Generation: " + _currentGeneration, new Vector2(500, 0), Color.White);
-            _spriteBatch.DrawString(_font, "Score: " + _currentScore, new Vector2(500, 40), Color.White);
+            _spriteBatch.DrawString(_font, $"Score: {_currentScore} / {_maxScore * 10}", new Vector2(500, 40), Color.White);
             _spriteBatch.DrawString(_font, $"Moves: {_moveCount}/{_maxMoves}", new Vector2(500, 80), Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
 
-        private int ConvertCoordsToInt(int x, int y, int gridSize)
+        private int ConvertCoordsToInt(int x, int y)
         {
             return (y * gridSize) + x;
         }
@@ -132,8 +135,8 @@ namespace RobbyVisualizer
             if (_generationIndex < _solutionFiles.Length - 1)
             {
                 // reset coords to rand position from 0 to 10
-                _posX = _rng.Next(10);
-                _posY = _rng.Next(10);
+                _posX = _rng.Next(gridSize);
+                _posY = _rng.Next(gridSize);
                 _moveCount = 0;
                 _currentScore = 0;
                 _generationIndex++;
@@ -156,7 +159,7 @@ namespace RobbyVisualizer
         private void MoveRobby()
         {
             // Update Robyy Position
-            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = false;
+            _tiles[ConvertCoordsToInt(_posX, _posY)].IsRobby = false;
 
             /**
                 In Here you need to switch the x and y to match the teachers ScireFirAllele .
@@ -168,11 +171,11 @@ namespace RobbyVisualizer
             //Thus we know this is what he has done.
             if (points == 10)
             {
-                _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Square = ContentsOfGrid.Empty;
+                _tiles[ConvertCoordsToInt(_posX, _posY)].Square = ContentsOfGrid.Empty;
                 _grid[_posX, _posY] = ContentsOfGrid.Empty;
             }
 
-            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
+            _tiles[ConvertCoordsToInt(_posX, _posY)].IsRobby = true;
         }
         /// <summary>
         /// Called on the first move to create the grid through which Robby will move. 
@@ -196,22 +199,10 @@ namespace RobbyVisualizer
             }
 
             // Set Previous Robby Position
-            int prevX = _posX, prevY = _posY;
+            // int prevX = _posX, prevY = _posY;
             // Set Initial Robby Position
-            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
-
-            // call score for allele
-            /**
-                In Here you need to switch the x and y to match the teachers ScireFirAllele .
-            */
-            double points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posY, ref _posX);
-
-            // Update Robby Position
-            _tiles[ConvertCoordsToInt(prevX, prevY, 10)].IsRobby = false;
-            _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
-
-            _currentScore += points;
-            _moveCount++;
+            _tiles[ConvertCoordsToInt(_posX, _posY)].IsRobby = true;
+            MoveRobby();
         }
         /// <summary>
         /// Reads a solution file and set variables accordingly.
