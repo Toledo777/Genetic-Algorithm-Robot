@@ -76,5 +76,5 @@ namespace RobbyTheRobot
     }
 
     ///TODO Add custom delegat
-    public delegate void FileWritten(string file_path);
+    public delegate void FileWritten(string file_path, long generation);
 }
