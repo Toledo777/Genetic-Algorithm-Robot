@@ -30,6 +30,8 @@ namespace RobbyVisualizer
 
         private SpriteFont _font;
 
+        private Boolean _restartGame;
+
         public RobbyVisualizerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -47,6 +49,7 @@ namespace RobbyVisualizer
             _currentScore = 0;
             _posX = _rng.Next(10);
             _posY = _rng.Next(10);
+            _restartGame = false;
             // count of how many generations have been displayed
             _generationIndex = 0;
             // Font
@@ -84,6 +87,12 @@ namespace RobbyVisualizer
                 if (_moveCount == _maxMoves)
                 {
                     Reset();
+                    if (_restartGame)
+                    {
+                        _restartGame = false;
+                        return;
+                    }
+
                 }
 
                 // first move of each generation
@@ -97,7 +106,7 @@ namespace RobbyVisualizer
                     MoveRobby(ref points);
                 }
 
-                _timer += 700;
+                _timer += 150;
             }
             base.Update(gameTime);
 
@@ -138,9 +147,11 @@ namespace RobbyVisualizer
             }
             else
             {
-                // _generationIndex = 0;
-                // _moveCount = 0;
-                // _currentScore = 0;
+                // Restart From gen 1
+                _generationIndex = 0;
+                _moveCount = 0;
+                _currentScore = 0;
+                _restartGame = true;
             }
         }
         private void MoveRobby(ref double points)
