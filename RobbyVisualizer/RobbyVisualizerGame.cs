@@ -40,10 +40,12 @@ namespace RobbyVisualizer
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
         }
 
         protected override void Initialize()
         {
+
             base.Initialize();
             // fill robby with preset values, not important as they are not used
             _robot = Robby.createRobby(1000, 243, 200, 7, 7, 6.0, 7.0);
@@ -58,6 +60,10 @@ namespace RobbyVisualizer
             _generationIndex = 0;
             // Font
             this._font = Content.Load<SpriteFont>("Font");
+            _graphics.PreferredBackBufferHeight = 550;
+            _graphics.PreferredBackBufferWidth = 392;
+            _graphics.ApplyChanges();
+
         }
 
         protected override void LoadContent()
@@ -116,11 +122,11 @@ namespace RobbyVisualizer
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, "Generation: " + _currentGeneration, new Vector2(500, 0), Color.White);
-            _spriteBatch.DrawString(_font, $"Score: {_currentScore} / {_maxScore}", new Vector2(500, 40), Color.White);
-            _spriteBatch.DrawString(_font, $"Moves: {_moveCount}/{_maxMoves}", new Vector2(500, 80), Color.White);
+            _spriteBatch.DrawString(_font, "Generation: " + _currentGeneration, new Vector2(100, 430), Color.White);
+            _spriteBatch.DrawString(_font, $"Score: {_currentScore} / {_maxScore}", new Vector2(100, 460), Color.White);
+            _spriteBatch.DrawString(_font, $"Moves: {_moveCount}/{_maxMoves}", new Vector2(100, 490), Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
