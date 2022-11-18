@@ -28,9 +28,10 @@ namespace RobbyVisualizer
         private int _generationIndex;
         private double _timer = 0;
         private SpriteFont _font;
-        readonly int delay = 100; //delay between each game tick.
-        readonly int gridSize = 10;
         private int _maxScore;
+        readonly int delay = 100; //delay between each game tick in ms.
+        readonly int gridSize = 10;
+        readonly int scoreForCanPickup = 10;
 
         private Boolean _restartGame;
 
@@ -52,7 +53,7 @@ namespace RobbyVisualizer
             _posX = _rng.Next(gridSize);
             _posY = _rng.Next(gridSize);
             _restartGame = false;
-            _maxScore = (gridSize * gridSize) / 2;
+            _maxScore = ((gridSize * gridSize) / 2) * scoreForCanPickup;
             // count of how many generations have been displayed
             _generationIndex = 0;
             // Font
@@ -118,7 +119,7 @@ namespace RobbyVisualizer
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_font, "Generation: " + _currentGeneration, new Vector2(500, 0), Color.White);
-            _spriteBatch.DrawString(_font, $"Score: {_currentScore} / {_maxScore * 10}", new Vector2(500, 40), Color.White);
+            _spriteBatch.DrawString(_font, $"Score: {_currentScore} / {_maxScore}", new Vector2(500, 40), Color.White);
             _spriteBatch.DrawString(_font, $"Moves: {_moveCount}/{_maxMoves}", new Vector2(500, 80), Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
@@ -169,7 +170,7 @@ namespace RobbyVisualizer
             _moveCount++;
             //The only way Robby can score points is by picking up a can, which grants 10 points. 
             //Thus we know this is what he has done.
-            if (points == 10)
+            if (points == scoreForCanPickup)
             {
                 _tiles[ConvertCoordsToInt(_posX, _posY)].Square = ContentsOfGrid.Empty;
                 _grid[_posX, _posY] = ContentsOfGrid.Empty;
