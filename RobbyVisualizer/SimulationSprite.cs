@@ -11,9 +11,9 @@ namespace RobbyVisualizer
         private SpriteBatch _spriteBatch;
         private ContentsOfGrid _square;
         private Texture2D _tileTexture;
+        //x & y positions of the square in the grid
         private int _x;
         private int _y;
-        // private bool _isRobby;
         public SimulationSprite(RobbyVisualizerGame game, ContentsOfGrid square, int x, int y, bool isRobby) : base(game)
         {
             this._game = game;
@@ -22,7 +22,8 @@ namespace RobbyVisualizer
             this._y = y;
             this.IsRobby = isRobby;
         }
-        public ContentsOfGrid Square{
+        public ContentsOfGrid Square
+        {
             get{return this._square;}
             set{this._square = value;}
         }
@@ -34,14 +35,13 @@ namespace RobbyVisualizer
 
         public override void Initialize()
         {
-            // TODO: Add your initialization logic here
             base.Initialize();
         }
 
         protected override void LoadContent()
         {  
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-           SetTileTexture();
+            SetTileTexture();
             base.LoadContent();
         }
 
@@ -50,8 +50,8 @@ namespace RobbyVisualizer
             SetTileTexture();
             base.Update(gameTime);
         }
-         /// <summary>
-        /// Sets _tileTexture depending on tile content.
+        /// <summary>
+        /// Sets _tileTexture depending on tile content. Can be robby, can or empty.
         /// </summary>
         void SetTileTexture(){
             if(IsRobby){

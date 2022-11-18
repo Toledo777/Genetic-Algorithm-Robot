@@ -27,8 +27,8 @@ namespace RobbyVisualizer
         private String[] _solutionFiles;
         private int _generationIndex;
         private double _timer = 0;
-
         private SpriteFont _font;
+        readonly int delay = 100; //delay between each game tick.
 
         public RobbyVisualizerGame()
         {
@@ -56,7 +56,6 @@ namespace RobbyVisualizer
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // open a file dialog box
             using (var folderDialog = new FolderBrowserDialog())
             {
@@ -87,17 +86,16 @@ namespace RobbyVisualizer
                 }
 
                 // first move of each generation
-                double points = 0;
                 if (_moveCount == 0)
                 {
-                    InitializeGrid(ref points);
+                    InitializeGrid();
                 }
                 else if (_moveCount > 0)
                 {
-                    MoveRobby(ref points);
+                    MoveRobby();
                 }
 
-                _timer += 100;
+                _timer += delay;
             }
             base.Update(gameTime);
 
@@ -141,7 +139,10 @@ namespace RobbyVisualizer
                 // _currentScore = 0;
             }
         }
-        private void MoveRobby(ref double points)
+        /// <summary>
+        /// Moves Robby according to ScoreForAllele
+        /// </summary>
+        private void MoveRobby()
         {
             // Update Robyy Position
             _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = false;
@@ -149,22 +150,25 @@ namespace RobbyVisualizer
             /**
                 In Here you need to switch the x and y to match the teachers ScireFirAllele .
             */
-            points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posY, ref _posX);
+            double points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posY, ref _posX);
             _currentScore += points;
             _moveCount++;
-
+            //The only way Robby can score points is by picking up a can, which grants 10 points. 
+            //Thus we know this is what he has done.
             if (points == 10)
             {
-
                 _tiles[ConvertCoordsToInt(_posX, _posY, 10)].Square = ContentsOfGrid.Empty;
                 _grid[_posX, _posY] = ContentsOfGrid.Empty;
             }
 
             _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
         }
-
-        private void InitializeGrid(ref double points)
+        /// <summary>
+        /// Called on the first move to create the grid through which Robby will move. 
+        /// </summary>
+        private void InitializeGrid()
         {
+            //don't need to store previous grids
             Components.Clear();
             _tiles = new List<SimulationSprite>();
             // new grid
@@ -180,7 +184,7 @@ namespace RobbyVisualizer
                 }
             }
 
-            // Set Previous RObby Position
+            // Set Previous Robby Position
             int prevX = _posX, prevY = _posY;
             // Set Initial Robby Position
             _tiles[ConvertCoordsToInt(_posX, _posY, 10)].IsRobby = true;
@@ -189,7 +193,7 @@ namespace RobbyVisualizer
             /**
                 In Here you need to switch the x and y to match the teachers ScireFirAllele .
             */
-            points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posY, ref _posX);
+            double points = RobbyHelper.ScoreForAllele(_moves, _grid, _rng, ref _posY, ref _posX);
 
             // Update Robby Position
             _tiles[ConvertCoordsToInt(prevX, prevY, 10)].IsRobby = false;
@@ -198,6 +202,11 @@ namespace RobbyVisualizer
             _currentScore += points;
             _moveCount++;
         }
+        /// <summary>
+        /// Reads a solution file and set variables accordingly.
+        /// </summary>
+        /// <param name="filePath">The path file to read</param>
+        /// <returns>int[] representing the genes of that solution </returns>
         private int[] readFile(String filePath)
         {
             string contents = File.ReadAllText(filePath);
