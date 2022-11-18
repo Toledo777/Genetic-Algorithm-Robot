@@ -42,7 +42,7 @@ namespace RobbyTheRobot
             this.seed = seed;
             this.NumberOfActions = numberOfActions;
             this.NumberOfTestGrids = numberOfTestGrids;
-            this.GridSize = 10;//gridSize;
+            this.GridSize = gridSize;
             this.MutationRate = mutationRate;
             this.EliteRate = eliteRate;
             this._geneticAlgorithm = GeneticLib.CreateGeneticAlgorithm(populationSize, numberOfGenes, lengthOfGene, mutationRate, eliteRate, numberOfTrials, _fitnessCalculation, seed);
